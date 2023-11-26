@@ -162,7 +162,7 @@ function popForm(ignore = "", index = -1) {
 	}
 	else if (gamesDisplay > 0) {
 		while (document.getElementById("games").rows.length + 1 > data.bundle.games.length)
-			rem(-1, false);
+			document.getElementById("games").deleteRow(-1);
 	}
 
 	let names = document.getElementsByClassName("tg");
