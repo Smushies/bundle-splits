@@ -687,22 +687,18 @@ function pickBundle() {
 		return new Promise((resolve, reject) => {
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
-				if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+				if (this.readyState == XMLHttpRequest.DONE && this.status == 200)
 					resolve(xhttp.response);
-				} else {
-					reject();
-				}
 			};
-			xhttp.open("GET", "https://barter.vg/i/" + id + "/json/", true);
+			xhttp.open("GET", `https://barter.vg/i/${id}/json/`, true);
 			xhttp.send();
 		});
 	}
 	
 	let promises = [];
-	promises.push(getGame(pick.games[0].item_id));
-	//pick.games.forEach(game => {
-	//	promises.push(getGame(game.item_id));
-	//});
+	pick.games.forEach(game => {
+		promises.push(getGame(game.item_id));
+	});
 	
 	Promise.all(promises).then((values) => {
 		for (let i = 0; i < values.length; i++)
