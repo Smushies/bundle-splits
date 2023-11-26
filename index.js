@@ -161,7 +161,7 @@ function popForm(ignore = "", index = -1) {
 			add(-2, false);
 	}
 	else if (gamesDisplay > 0) {
-		while (document.getElementById("games").rows.length + 1 > data.bundle.games.length)
+		while (document.getElementById("games").rows.length > data.bundle.games.length + 1)
 			document.getElementById("games").deleteRow(-1);
 	}
 
