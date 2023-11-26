@@ -633,19 +633,19 @@ function fetchBundles() {
 			let now = Date.now();
 			barterBundles = [];
 			for (let key in resp) {
-				let obj = resp[key];
-				if (obj.meta.end > now) {
+				let bun = resp[key];
+				if (bun.meta.end > now) {
 					let games = [];
-					for (let gameKey in obj.games)
+					for (let gameKey in bun.games)
 					games.push({
-						id: obj.games[gameKey].id,
-						item_id: obj.games[gameKey].item_id
+						id: bun.games[gameKey].id,
+						item_id: bun.games[gameKey].item_id
 					});
 					barterBundles.push({
 						id: key,
-						store: obj.meta.store,
-						storeName: obj.meta.storeName,
-						title: obj.meta.title,
+						store: bun.meta.store,
+						storeName: bun.meta.storeName,
+						title: bun.meta.title,
 						games: games
 					});
 				}
