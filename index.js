@@ -699,9 +699,10 @@ function pickBundle() {
 	}
 	
 	let promises = [];
-	pick.games.forEach(game => {
-		promises.push(getGame(game.item_id));
-	});
+	promises.push(getGame(pick.games[0].item_id));
+	//pick.games.forEach(game => {
+	//	promises.push(getGame(game.item_id));
+	//});
 	
 	Promise.all(promises).then((values) => {
 		for (let i = 0; i < values.length; i++)
