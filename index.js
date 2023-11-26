@@ -637,6 +637,11 @@ function fetchBundles() {
 			let resp = JSON.parse(req.response).bundles;
 			let now = Date.now() / 1000;
 			barterBundles = [];
+			let bundleSelect = document.getElementById("bundleSelect");
+			let count = bundleSelect.options.length - 1;
+			for(i = count; i >= 0; i--)
+				bundleSelect.remove(i);
+			
 			for (let key in resp) {
 				let bun = resp[key];
 				if (bun.meta.end > now && bun.meta.store !== 17 /*DIG*/) {
@@ -657,7 +662,6 @@ function fetchBundles() {
 				}
 			}
 			barterBundles.sort((a, b) => (a.start - b.start) * -1);
-			let bundleSelect = document.getElementById("bundleSelect");
 			barterBundles.forEach(bundle => {
 				let bundleOption = document.createElement("option");
 				bundleOption.value = bundle.id;
@@ -793,7 +797,7 @@ if (slink) link = {
 let urlParams = new URLSearchParams(window.location.search);
 let shared = urlParams.get('share');
 if (shared) {
-	let url = `${document.location}/splits/${shared}.json`;
+	let url = `/split/splits/${shared}.json`;
 	fetch(url).then(response => response.json()).then(out => {
 		consumeShareLink(out);
 		link = {
