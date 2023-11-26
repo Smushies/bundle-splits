@@ -650,7 +650,7 @@ function fetchBundles() {
 						id: key,
 						start: bun.meta.start,
 						store: bun.meta.store,
-						storeName: bun.meta.storeName,
+						storeName: bun.meta.storename,
 						title: bun.meta.title,
 						games: games
 					});
@@ -671,7 +671,44 @@ function fetchBundles() {
 }
 
 function pickBundle() {
+	document.getElementById("pickBundleButton").disabled = true;
+	let pick = barterBundles.find(bundle => bundle.id == document.getElementById("bundleSelect").value);
 	
+	while (data.bundle.games.length < pick.games.length) data.bundle.games.push({
+		name: "",
+		value: 0,
+		price: 0,
+		priceOverride: false,
+		claims: []
+	});
+	while (data.bundle.games.length > pick.games.length) data.bundle.games.pop();
+	
+	const getGame = (id) => {
+		return new Promise((resolve, reject) => {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+					resolve(JSON.parse(xhttp.response).title);
+				} else {
+					reject();
+				}
+			};
+			xhttp.open("GET", `https://barter.vg/i/${id}/json`, true); // Needs to be set to your needs. This is just an example
+			xhttp.send();
+		});
+	}
+	
+	let promises = [];
+	pick.games.forEach(game => {
+		promises.push(getGame(game.item_id));
+	});
+	
+	Promise.All(promises).then((values) => {
+		for (let i = 0; i < values.length; i++)
+			data.bundle.games[i].name = values[i];
+		reCalc();
+		document.getElementById("pickBundleButton").disabled = true;
+	});
 }
 
 function generateShareLink() {
