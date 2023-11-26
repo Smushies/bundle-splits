@@ -730,7 +730,7 @@ function generateShareLink() {
 	request.setRequestHeader("Content-type", "application/json");
 	request.onreadystatechange = () => {
 		if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
-			link.url = `${document.location}?share=${request.response}`;
+			link.url = `${document.location.host}/split?share=${request.response}`;
 			link.valid = true;
 			localStorage.setItem('link', JSON.stringify(link));
 			document.getElementById("linkValid").classList.remove("border-warning");
@@ -805,7 +805,7 @@ if (shared) {
 			valid: true
 		};
 		reCalc();
-		window.history.replaceState(null, "", "/" + window.location.href.substring(window.location.href.lastIndexOf('.') + 4).split("?")[0]);
+		window.history.replaceState(null, "", "/split");
 	}).catch(err => {throw err});
 }
 
