@@ -688,7 +688,7 @@ function pickBundle() {
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-					resolve(JSON.parse(xhttp.response).title);
+					resolve(xhttp.response);
 				} else {
 					reject();
 				}
@@ -705,7 +705,7 @@ function pickBundle() {
 	
 	Promise.all(promises).then((values) => {
 		for (let i = 0; i < values.length; i++)
-			data.bundle.games[i].name = values[i];
+			data.bundle.games[i].name = JSON.parse(values[i]).title;
 		reCalc();
 		document.getElementById("pickBundleButton").disabled = true;
 	});
