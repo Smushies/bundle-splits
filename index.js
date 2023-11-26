@@ -634,7 +634,7 @@ function fetchBundles() {
 			barterBundles = [];
 			for (let key in resp) {
 				let obj = resp[key];
-				if (obj.meta.end > now)
+				if (obj.meta.end > now) {
 					let games = [];
 					for (let gameKey in obj.games)
 					games.push({
@@ -648,6 +648,7 @@ function fetchBundles() {
 						title: obj.meta.title,
 						games: games
 					});
+				}
 			}
 			let bundleSelect = document.getElementById("bundleSelect");
 			barterBundles.forEach(bundle => {
