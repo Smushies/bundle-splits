@@ -630,7 +630,7 @@ function fetchBundles() {
 	req.onreadystatechange = () => {
 		if (req.readyState === XMLHttpRequest.DONE && req.status === 200) {
 			let resp = JSON.parse(req.response).bundles;
-			let now = Date.now();
+			let now = Date.now() / 1000;
 			barterBundles = [];
 			for (let key in resp) {
 				let bun = resp[key];
