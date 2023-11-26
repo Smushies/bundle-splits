@@ -646,7 +646,7 @@ function generateShareLink() {
 			localStorage.setItem('link', JSON.stringify(link));
 			document.getElementById("linkValid").classList.remove("border-warning");
 			document.getElementById("genLink").disabled = link.valid;
-		    document.getElementById("shareLink").value = link.url;
+			document.getElementById("shareLink").value = link.url;
 		}
 	};
 	request.send(JSON.stringify(contents));
