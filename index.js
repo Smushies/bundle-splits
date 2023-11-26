@@ -624,7 +624,12 @@ function addGGs() {
  Array.from(document.getElementsByClassName("gg-img")).forEach(i => i.src = "/split/gg.png");
 }
 
+function allowPick() {
+	document.getElementById("pickBundleButton").disabled = false;
+}
+
 function fetchBundles() {
+	document.getElementById("fetchBundlesButton").disabled = true;
 	let req = new XMLHttpRequest();
 	req.open("GET", "https://barter.vg/bundles/json/", true);
 	req.onreadystatechange = () => {
@@ -634,7 +639,7 @@ function fetchBundles() {
 			barterBundles = [];
 			for (let key in resp) {
 				let bun = resp[key];
-				if (bun.meta.end > now) {
+				if (bun.meta.end > now && bun.meta.store !== 17 /*DIG*/) {
 					let games = [];
 					for (let gameKey in bun.games)
 					games.push({
@@ -656,9 +661,10 @@ function fetchBundles() {
 			barterBundles.forEach(bundle => {
 				let bundleOption = document.createElement("option");
 				bundleOption.value = bundle.id;
-				bundleOption.innerHTML = bundle.title;
+				bundleOption.innerHTML = `${bundle.storeName}: ${bundle.title}`;
 				bundleSelect.appendChild(bundleOption);
 			});
+			document.getElementById("fetchBundlesButton").disabled = false;
 		}
 	};
 	req.send();

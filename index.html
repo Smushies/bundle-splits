@@ -27,11 +27,11 @@
 							<div class="col">
 								<label for="list">Barter.vg Bundles:</label>
 								<div class="input-group">
-									<select id="bundleSelect" class="form-select" size="5">
+									<select id="bundleSelect" class="form-select" size="5" onchange="allowPick()">
 									</select>
 									<div class="btn-group-vertical" role="group">
 										<button class="btn btn-outline-secondary" type="button" id="fetchBundlesButton" onclick="fetchBundles()">Fetch</button>
-										<button class="btn btn-outline-secondary" type="button" id="pickBundleButton" onclick="pickBundle()">Pick</button>
+										<button class="btn btn-outline-secondary" type="button" id="pickBundleButton" onclick="pickBundle()" disabled>Pick</button>
 									</div>
 								</div>
 							</div>
