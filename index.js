@@ -643,6 +643,7 @@ function fetchBundles() {
 					});
 					barterBundles.push({
 						id: key,
+						start: bun.meta.start,
 						store: bun.meta.store,
 						storeName: bun.meta.storeName,
 						title: bun.meta.title,
@@ -650,6 +651,7 @@ function fetchBundles() {
 					});
 				}
 			}
+			barterBundles.sort((a, b) => (a.start - b.start) * -1);
 			let bundleSelect = document.getElementById("bundleSelect");
 			barterBundles.forEach(bundle => {
 				let bundleOption = document.createElement("option");
