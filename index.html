@@ -56,13 +56,13 @@
 								<label for="bPrice">Bundle Price: </label>
 								<div class="input-group">
 									<span class="input-group-text curr">$</span>
-									<input id="bPrice" type="number" class="form-control" step="any" oninput="validate('bundle.price', this.value)" onblur="popForm()">
+									<input id="bPrice" type="number" class="form-control" step="any" oninput="validate('bundle.price', this.value)" onchange="popForm()">
 								</div>
 							</div>
 							<div class="col">
 								<label for="discount">Discount: </label>
 								<div class="input-group">
-									<input id="discount" class="form-control" step="any" oninput="validate('bundle.discount', this.value)" onblur="popForm()">
+									<input id="discount" class="form-control" step="any" oninput="validate('bundle.discount', this.value)" onchange="popForm()">
 									<span class="input-group-text">%</span>
 								</div>
 							</div>
@@ -71,14 +71,14 @@
 							<div class="col">
 								<label for="bundleCount"># of Bundles: </label>
 								<div class="input-group">
-									<input id="bundleCount" type="number" step="1" class="form-control" oninput="validate('bundle.count', this.value)" onblur="popForm()">
+									<input id="bundleCount" type="number" step="1" class="form-control" oninput="validate('bundle.count', this.value)" onchange="popForm()">
 								</div>
 							</div>
 							<div class="col">
 								<label for="byob">Build Your Own Bundle: # of Games</label>
 								<div class="input-group">
 									<div class="input-group-text"><input id="byob" class="form-check-input mt-0" type="checkbox" onchange="byob()"></div>
-									<input id="byobC" type="number" step="1" class="form-control" oninput="validate('bundle.byob', this.value)" onblur="popForm()" disabled>
+									<input id="byobC" type="number" step="1" class="form-control" oninput="validate('bundle.byob', this.value)" onchange="popForm()" disabled>
 								</div>
 							</div>
 						</div>
@@ -114,7 +114,7 @@
 								<label for="ppMin">Minimum Amount: </label>
 								<div class="input-group">
 									<span class="input-group-text curr">$</span>
-									<input id="ppMin" type="number" class="form-control" step="any" oninput="validate('params.paypalMin', this.value)" onblur="popForm()">
+									<input id="ppMin" type="number" class="form-control" step="any" oninput="validate('params.paypalMin', this.value)" onchange="popForm()">
 								</div>
 							</div></div>
 						</div>
@@ -123,12 +123,12 @@
 								<label for="gemPrice">Sack of Gems Price: </label>
 								<div class="input-group">
 									<span class="input-group-text curr">$</span>
-									<input id="gemPrice" type="number" step="any" class="form-control" oninput="validate('params.gemsPrice', this.value)" onblur="popForm()">
+									<input id="gemPrice" type="number" step="any" class="form-control" oninput="validate('params.gemsPrice', this.value)" onchange="popForm()">
 								</div>
 							</div>
 							<div class="col"><div id="keyOptions" >
 								<label for="keyPrice">Gems per Key: </label>
-								<input id="keyPrice" type="number" step="1" class="form-control" oninput="validate('params.keysPrice', this.value)" onblur="popForm()">
+								<input id="keyPrice" type="number" step="1" class="form-control" oninput="validate('params.keysPrice', this.value)" onchange="popForm()">
 							</div></div>
 						</div>
 						</br>
@@ -166,7 +166,7 @@
 						<div class="row">
 							<label for="comments">Comments: </label>
 							<div class="input-group">
-								<textarea id="comments" type="text" class="form-control" oninput="validate('params.comments', this.value)" onblur="popForm()"></textarea>
+								<textarea id="comments" type="text" class="form-control" oninput="validate('params.comments', this.value)" onchange="popForm()"></textarea>
 								<div class=" btn-group-vertical" role="group">
 										<input type="radio" class="btn-check" name="cOption" id="commentTop" autocomplete="off" onchange="validate('params.commentBottom', !event.target.checked)">
 										<label class="btn btn-outline-secondary" for="commentTop"><i class="bi bi-chevron-bar-up"></i></label>
@@ -186,18 +186,18 @@
 								<th></th>
 							</tr>
 							<tr>
-								<td><input type="text" class="form-control tg" oninput="validate('games.name', this.value, this.closest('tr').rowIndex)" onblur="popForm()"></td>
+								<td><input type="text" class="form-control tg" oninput="validate('games.name', this.value, this.closest('tr').rowIndex)" onchange="popForm()"></td>
 								<td>
 									<div class="input-group">
 									<span class="input-group-text curr">$</span>
-									<input type="number" class="form-control tv" step="any" oninput="validate('games.value', this.value, this.closest('tr').rowIndex)" onblur="popForm()">
+									<input type="number" class="form-control tv" step="any" oninput="validate('games.value', this.value, this.closest('tr').rowIndex)" onchange="popForm()">
 									<button class="btn btn-outline-secondary ggButton" type="button" onclick="ggp(this.closest('tr').rowIndex)"><img class="gg-img" alt="gg.deals" width=30></button>
 									</div>
 								</td>
 								<td>
 									<div class="input-group">
 										<span class="input-group-text curr">$</span>
-										<input class="form-control tp" step="any" oninput="validate('games.price', this.value, this.closest('tr').rowIndex)" onblur="popForm()">
+										<input class="form-control tp" step="any" oninput="validate('games.price', this.value, this.closest('tr').rowIndex)" onchange="popForm()">
 										<button type="button" class="btn btn-outline-secondary p-override" onclick="override(this.closest('tr').rowIndex)">a</button>
 									</div>
 								</td>
