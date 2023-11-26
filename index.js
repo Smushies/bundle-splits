@@ -656,3 +656,4 @@ if (shared) {
 
 reCalc();
 document.getElementById("lastMod").textContent = (new Date(Date.parse(document.lastModified))).toUTCString();
+document.getElementById("genLink").addEventListener('click', generateShareLink(data));
