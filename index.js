@@ -633,14 +633,14 @@ function fetchBundles() {
 			let now = Date.now();
 			barterBundles = [];
 			for (let key in resp) {
-				let games = [];
 				let obj = resp[key];
-				for (let gameKey in obj.games))
+				if (obj.meta.end > now)
+					let games = [];
+					for (let gameKey in obj.games)
 					games.push({
 						id: obj.games[gameKey].id,
 						item_id: obj.games[gameKey].item_id
 					});
-				if (obj.meta.end > now)
 					barterBundles.push({
 						id: key,
 						store: obj.meta.store,
@@ -657,7 +657,7 @@ function fetchBundles() {
 				bundleSelect.appendChild(bundleOption);
 			});
 		}
-	}
+	};
 	req.send();
 }
 
