@@ -1,0 +1,28 @@
+body {
+	padding: 50px 0px;
+}
+#copyDiv {
+	text-align: center;
+}
+
+label {
+	font-weight: bold;
+}
+#games {
+	vertical-align: middle;
+}
+
+.hide {
+	display: none !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    display: none;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
