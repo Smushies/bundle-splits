@@ -693,7 +693,7 @@ function pickBundle() {
 					reject();
 				}
 			};
-			xhttp.open("GET", `https://barter.vg/i/${id}/json`, true); // Needs to be set to your needs. This is just an example
+			xhttp.open("GET", "https://barter.vg/i/" + id + "/json/", true);
 			xhttp.send();
 		});
 	}
@@ -708,7 +708,7 @@ function pickBundle() {
 		for (let i = 0; i < values.length; i++)
 			data.bundle.games[i].name = JSON.parse(values[i]).title;
 		reCalc();
-		document.getElementById("pickBundleButton").disabled = true;
+		document.getElementById("pickBundleButton").disabled = false;
 	});
 }
 
