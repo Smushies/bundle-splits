@@ -1,4 +1,4 @@
-import { generateShareLink, consumeShareLink } from "./modules/share.js";
+import { generateShareLink, consumeShareLink } from "/split/modules/share.js";
 
 var data = {
 	params: {
