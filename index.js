@@ -214,6 +214,17 @@ function list() {
 	reCalc();
 }
 
+function toggleList(op) {
+	if (op) {
+		document.getElementById("list1").classList.remove("hide");
+		document.getElementById("list2").classList.add("hide");
+	}
+	else {
+		document.getElementById("list1").classList.add("hide");
+		document.getElementById("list2").classList.remove("hide");
+	}
+}
+
 function reCalc(pop = true) {
 	let bundlePrice = data.bundle.discount != 1 ? data.bundle.price * (1 - data.bundle.discount) : 0;
 	
