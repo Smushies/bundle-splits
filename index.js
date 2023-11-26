@@ -36,10 +36,10 @@ var data = {
 const emoji = {
 		gems: [":Gems:", "💎", "gems"],
 		sacks: [":Sackofgems:", "1000💎", "sack of gems"],
-		tf2: [":Tf2key:", "🗝️", "tf2 keys"],
-		sent: ["🎮 ", "🎮 ", "(sent) "],
-		paid: ["💸 ", "💸 ", "(paid) "],
-		done: ["☑️ ", "☑️ ", "(done) "],
+		tf2: [":Tf2key:", "🔑", "tf2 keys"],
+		sent: ["🎮", "🎮", "(sent)"],
+		paid: ["💸", "💸", "(paid)"],
+		done: ["☑️", "☑️", "(done)"],
 };
 
 var gamesToClaim = [];
@@ -47,6 +47,7 @@ var link = {
 	url: "",
 	valid: false
 };
+var barterBundles = [];
 
 function validate(name, value, index = -1) {
 	switch(name) {
@@ -623,6 +624,47 @@ function addGGs() {
  Array.from(document.getElementsByClassName("gg-img")).forEach(i => i.src = "/split/gg.png");
 }
 
+function fetchBundles() {
+	let req = new XMLHttpRequest();
+	req.open("GET", "https://barter.vg/bundles/json/", true);
+	req.onreadystatechange = () => {
+		if (req.readyState === XMLHttpRequest.DONE && request.status === 200) {
+			let resp = JSON.parse(req.response).bundles;
+			let now = Date.now();
+			barterBundles = [];
+			for (let key in resp) {
+				let games = [];
+				let obj = resp[key];
+				for (let gameKey in obj.games))
+					games.push({
+						id: obj.games[gameKey].id,
+						item_id: obj.games[gameKey].item_id
+					});
+				if (obj.meta.end > now)
+					barterBundles.push({
+						id: key,
+						store: obj.meta.store,
+						storeName: obj.meta.storeName,
+						title: obj.meta.title,
+						games: games
+					});
+			}
+			let bundleSelect = document.getElementById("bundleSelect");
+			barterBundles.forEach(bundle => {
+				let bundleOption = document.createElement("option");
+				bundleOption.value = bundle.id;
+				bundleOption.innerHTML = bundle.title;
+				bundleSelect.appendChild(bundleOption);
+			});
+		}
+	}
+	req.send();
+}
+
+function pickBundle() {
+	
+}
+
 function generateShareLink() {
 	let contents = {
 		params: {
@@ -636,7 +678,7 @@ function generateShareLink() {
 			type: data.bundle.type
 		}
 	};
-	request = new XMLHttpRequest();
+	let request = new XMLHttpRequest();
 	request.open("POST", "/split/splits/split.php", true);
 	request.setRequestHeader("Content-type", "application/json");
 	request.onreadystatechange = () => {

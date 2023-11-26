@@ -16,19 +16,33 @@
 			<li class="nav-item" role="presentation"><a class="nav-link active" href="#setup" data-bs-toggle="tab" data-bs-target="#setup" aria-controls="setup" role="tab" data-toggle="tab">Setup</a></li>
 			<li class="nav-item" role="presentation"><a class="nav-link" href="#claiming" data-bs-toggle="tab" data-bs-target="#claiming" aria-controls="claiming" role="tab" data-toggle="tab">Claiming</a></li>
 			<li class="nav-item" role="presentation"><a class="nav-link" href="#export" data-bs-toggle="tab" data-bs-target="#export" aria-controls="export" role="tab" data-toggle="tab">Share</a></li>
-			<li class="nav-item" role="presentation"><a class="nav-link" href="#help" data-bs-toggle="tab" data-bs-target="#help" aria-controls="help" role="tab" data-toggle="tab">Help</a></li>
+			<li class="nav-item ms-auto" role="presentation"><a class="nav-link" href="#help" data-bs-toggle="tab" data-bs-target="#help" aria-controls="help" role="tab" data-toggle="tab">Help</a></li>
 		</ul>
 		</br>
 		<div class="tab-content">
 			<div id="setup" role="tabpanel" class="tab-pane active">
 				<div class="row">
 					<div id="paramsDiv" class="col form-group col-12 col-xl-6">
-						<label for="list">List of Games: 1 Title Per Line</label>
-						<div class="input-group">
-							<textarea id="list" rows="1" class="form-control"></textarea>
-							<button class="btn btn-outline-primary" type="button" id="barterGo" onclick="list()">Apply</button>
+						<div class="row">
+							<div class="col">
+								<label for="list">Barter.vg Bundles:</label>
+								<div class="input-group">
+									<select id="bundleSelect" class="form-select" size="5">
+									</select>
+									<div class="btn-group-vertical" role="group">
+										<button class="btn btn-outline-secondary" type="button" id="fetchBundlesButton" onclick="fetchBundles()">Fetch</button>
+										<button class="btn btn-outline-secondary" type="button" id="pickBundleButton" onclick="pickBundle()">Pick</button>
+									</div>
+								</div>
+							</div>
+							<div class="col">
+								<label for="list">List of Games: 1 Title Per Line</label>
+								<div class="input-group">
+									<textarea id="list" rows="1" class="form-control"></textarea>
+									<button class="btn btn-outline-primary" type="button" id="barterGo" onclick="list()">Apply</button>
+								</div>
+							</div>
 						</div>
-						</br>
 						<div class="row">
 							<div class="col">
 								<label for="currrency">Currency: </label>
