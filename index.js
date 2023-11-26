@@ -628,7 +628,7 @@ function fetchBundles() {
 	let req = new XMLHttpRequest();
 	req.open("GET", "https://barter.vg/bundles/json/", true);
 	req.onreadystatechange = () => {
-		if (req.readyState === XMLHttpRequest.DONE && request.status === 200) {
+		if (req.readyState === XMLHttpRequest.DONE && req.status === 200) {
 			let resp = JSON.parse(req.response).bundles;
 			let now = Date.now();
 			barterBundles = [];
