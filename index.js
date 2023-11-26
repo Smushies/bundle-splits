@@ -642,7 +642,7 @@ if (slink) link = {
 let urlParams = new URLSearchParams(window.location.search);
 let shared = urlParams.get('share');
 if (shared) {
-	let url = `https://smushi.es/split/splits/${shared}.json`;
+	let url = `https://smushi.es${document.location.pathname}/splits/${shared}.json`;
 	fetch(url).then(response => response.json()).then(out => {
 		consumeShareLink(out);
 		link = {
