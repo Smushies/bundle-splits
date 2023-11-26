@@ -703,7 +703,7 @@ function pickBundle() {
 		promises.push(getGame(game.item_id));
 	});
 	
-	Promise.All(promises).then((values) => {
+	Promise.all(promises).then((values) => {
 		for (let i = 0; i < values.length; i++)
 			data.bundle.games[i].name = values[i];
 		reCalc();
