@@ -50,6 +50,7 @@
 									<option value="USD" selected>USD</option>
 									<option value="EUR">EUR</option>
 									<option value="GBP">GBP</option>
+									<option value="other">Other</option>
 								</select>
 							</div>
 							<div class="col">
@@ -95,6 +96,8 @@
 									<label class="btn btn-outline-secondary" for="gems">Gems</label>
 									<input type="checkbox" class="btn-check" id="keys" autocomplete="off" onchange="validate('params.keys', event.target.checked)">
 									<label class="btn btn-outline-secondary" for="keys">TF2 Keys</label>
+									<input type="checkbox" class="btn-check" id="customPay" autocomplete="off" onchange="validate('params.customPay', event.target.checked)">
+									<label class="btn btn-outline-secondary" for="customPay">Custom</label>
 								</div>
 							</div>
 						</div>
@@ -151,6 +154,8 @@
 										<label class="btn btn-outline-secondary" for="emojiE">Emoji</label>
 										<input type="radio" class="btn-check" name="eOption" id="emojiT" autocomplete="off" onchange="validate('params.emoji', event.target.checked ? 2 : -1)">
 										<label class="btn btn-outline-secondary" for="emojiT">Text</label>
+										<input type="radio" class="btn-check" name="eOption" id="emojiC" autocomplete="off" onchange="validate('params.emoji', event.target.checked ? 3 : -1)">
+										<label class="btn btn-outline-secondary" for="emojiC">Custom</label>
 									</div>
 							</div>
 							<div id="textOptions" class="col">

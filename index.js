@@ -1,6 +1,10 @@
 var data = {
 	params: {
 		currency: "USD",
+		currencyOther: {
+			code: "CNY",
+			symbol: "¥"
+		},
 		paypal: true,
 		paypalGS: true,
 		paypalMin: 0.20,
@@ -8,9 +12,19 @@ var data = {
 		gemsPrice: 0.24,
 		keys: true,
 		keysPrice: 7500,
+		customPay: 0,
+		customPayment: "Bananas",
 		comments: "",
 		commentsBottom: 0,
 		emoji: 0,
+		customEmoji: {
+			gems: "💎",
+			sacks: "1000💎",
+			tf2: "🔑",
+			sent: "🎮",
+			paid: "💸",
+			done: "✅"
+		},
 		text: 0,
 		hidePricing: false
 	},
@@ -39,7 +53,7 @@ const emoji = {
 		tf2: [":Tf2key:", "🔑", "tf2 keys"],
 		sent: ["🎮", "🎮", "(sent)"],
 		paid: ["💸", "💸", "(paid)"],
-		done: ["☑️", "☑️", "(done)"],
+		done: ["✅", "✅", "(done)"],
 };
 
 var gamesToClaim = [];
@@ -379,6 +393,7 @@ function buildText() {
 			g.claims.forEach(c => {
 				let cc = data.claimers.find(x => x.name == c);
 				let ce = !cc ? "" : cc.sent ? cc.paid ? emoji.done[data.params.emoji] : emoji.sent[data.params.emoji] : cc.paid ? emoji.paid[data.params.emoji] : "";
+				if (ce.length > 0) ce += " ";
 				t += `${ce}${g.name} - ${c}\n`;
 			});
 		});
@@ -392,6 +407,7 @@ function buildText() {
 			g.claims.forEach(c => {
 				let cc = data.claimers.find(x => x.name == c);
 				let ce = !cc ? "" : cc.sent ? cc.paid ? emoji.done[data.params.emoji] : emoji.sent[data.params.emoji] : cc.paid ? emoji.paid[data.params.emoji] : "";
+				if (ce.length > 0) ce += " ";
 				t += `${ce}${gg} - ${c}\n`;
 			});
 			
