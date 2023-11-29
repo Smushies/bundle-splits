@@ -757,7 +757,7 @@ function generateShareLink() {
 	request.setRequestHeader("Content-type", "application/json");
 	request.onreadystatechange = () => {
 		if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
-			link.url = `${document.location.host}/split?share=${request.response}`;
+			link.url = `https://${document.location.host}/split?share=${request.response}`;
 			link.valid = true;
 			localStorage.setItem('link', JSON.stringify(link));
 			document.getElementById("linkValid").classList.remove("border-warning");
