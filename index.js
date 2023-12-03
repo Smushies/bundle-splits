@@ -320,8 +320,8 @@ function formatCurr(value, symbol = false) {
 	
 	if (symbol)
 		f = c.alignRight
-			? `${value.toLocaleString("fr-FR", { minimumFractionDigits: 2 })}${c.symbol}`
-			: `${c.symbol}${value.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+			? `${value.toLocaleString(navigator.language, { minimumFractionDigits: 2 })}${c.symbol}`
+			: `${c.symbol}${value.toLocaleString(navigator.language, { minimumFractionDigits: 2 })}`;
 			
 	return f;
 }
