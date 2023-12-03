@@ -361,6 +361,8 @@ function buildText() {
 		footer += `PayPal ${getCurr(data.params.currency).code} ${data.params.paypalGS ? "G&S" : "F&F"} ${fees}\n`;
 	if (data.params.revolut)
 		footer += `Revolut ${getCurr(data.params.currency).code}\n`;
+	if (data.params.customPay)
+		footer += data.params.customPayment + "\n";
 	if (data.params.gems) {
 		footer += `Gems (${formatCurr(data.params.gemsPrice, true)} / ${emoji.sacks[data.params.emoji]})\n`;
 		if (data.params.keys)
