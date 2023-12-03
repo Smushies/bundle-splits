@@ -28,7 +28,13 @@ var data = {
 			done: "✅"
 		},
 		text: 0,
-		hidePricing: false
+		misc: {
+			available: 1,
+			taken: 1,
+			pricing: 1,
+			payment: 1,
+			forceEmoji: false
+		}
 	},
 	bundle: {
 		name: "",
@@ -47,7 +53,7 @@ var data = {
 		}]
 	},
 	claimers: [],
-	version: 1
+	version: 2
 };
 
 const emoji = {
@@ -56,7 +62,7 @@ const emoji = {
 		tf2: [":Tf2key:", "🔑", "tf2 keys"],
 		sent: ["🎮", "🎮", "(sent)"],
 		paid: ["💸", "💸", "(paid)"],
-		done: ["✅", "✅", "(done)"],
+		done: ["✅", "✅", "(done)"]
 };
 
 var gamesToClaim = [];
@@ -390,9 +396,9 @@ function buildText() {
 	if (data.params.customPay)
 		footer += data.params.customPayment + "\n";
 	if (data.params.gems) {
-		footer += `Gems (${formatCurr(data.params.gemsPrice, true)} / ${emoji.sacks[data.params.emoji]})\n`;
+		footer += `Gems (${formatCurr(data.params.gemsPrice, true)} / ${getEmoji().sacks})\n`;
 		if (data.params.keys)
-			footer += `TF2 Keys (${emoji.tf2[data.params.emoji]} 1:${data.params.keysPrice} ${emoji.gems[data.params.emoji]})\n`;
+			footer += `TF2 Keys (${getEmoji().tf2} 1:${data.params.keysPrice} ${getEmoji().gems})\n`;
 	}
 
 	if (data.bundle.type == 1) {
@@ -402,7 +408,7 @@ function buildText() {
 			
 			g.claims.forEach(c => {
 				let cc = data.claimers.find(x => x.name == c);
-				let ce = !cc ? "" : cc.sent ? cc.paid ? emoji.done[data.params.emoji] : emoji.sent[data.params.emoji] : cc.paid ? emoji.paid[data.params.emoji] : "";
+				let ce = !cc ? "" : cc.sent ? cc.paid ? getEmoji().done : getEmoji().sent : cc.paid ? getEmoji().paid : "";
 				if (ce.length > 0) ce += " ";
 				t += `${ce}${g.name} - ${c}\n`;
 			});
@@ -411,12 +417,12 @@ function buildText() {
 	else {
 		data.bundle.games.forEach(g => {
 			let gems = Math.ceil((g.price / data.params.gemsPrice) * 1000);
-			let gemsDisp = data.params.gems ? `${gems} ${emoji.gems[data.params.emoji]}` : "";
+			let gemsDisp = data.params.gems ? `${gems} ${getEmoji().gems}` : "";
 			let priceDisp = data.params.paypal || data.params.revolut || data.params.customPay ? `${formatCurr(g.price, true)}${gemsDisp ? " (" + gemsDisp + ")" : ""}` : gemsDisp;
 			let gg = `${g.name}: ${priceDisp}`;
 			g.claims.forEach(c => {
 				let cc = data.claimers.find(x => x.name == c);
-				let ce = !cc ? "" : cc.sent ? cc.paid ? emoji.done[data.params.emoji] : emoji.sent[data.params.emoji] : cc.paid ? emoji.paid[data.params.emoji] : "";
+				let ce = !cc ? "" : cc.sent ? cc.paid ? getEmoji().done : getEmoji().sent : cc.paid ? getEmoji().paid : "";
 				if (ce.length > 0) ce += " ";
 				t += `${ce}${gg} - ${c}\n`;
 			});
@@ -432,7 +438,7 @@ function buildText() {
 	let p1 = data.bundle.games.reduce((t, g) => g.priceOverride ? t : t + g.value, 0);
 	let p2 = bundlePrice - data.bundle.games.reduce((t, g) => g.priceOverride ? t + g.price : t, 0);
 	
-	let gems = data.params.gems ? ` (${Math.ceil((data.bundle.games[0].price / data.params.gemsPrice) * 1000)} ${emoji.gems[data.params.emoji]})\n` : "\n";
+	let gems = data.params.gems ? ` (${Math.ceil((data.bundle.games[0].price / data.params.gemsPrice) * 1000)} ${getEmoji().gems})\n` : "\n";
 	
 	let pricing = data.bundle.type == 1
 		? `\n${boldify('Pricing:')} ${formatCurr(bundlePrice, true)} / ${data.bundle.byob} = ${boldify(formatCurr(data.bundle.games[0].price, true), true)}${gems}`
@@ -512,6 +518,7 @@ function doClaim() {
 	if (!n) return;
 	
 	gamesToClaim.forEach(i => {
+
 		data.bundle.games[i].claims.push(n);
 	});
 	
@@ -575,6 +582,20 @@ function byob() {
 	reCalc();
 }
 
+function getEmoji(alt = false) {
+	if (data.params.emoji == 3 && !alt)
+		return data.customEmoji;
+	else
+		return {
+			gems: alt ? emoji.gems[1] : emoji.gems[data.params.emoji],
+			sacks: alt ? emoji.sacks[1] : emoji.sacks[data.params.emoji],
+			tf2: alt ? emoji.tf2[1] : emoji.tf2[data.params.emoji],
+			sent: alt ? emoji.sent[1] : emoji.sent[data.params.emoji],
+			paid: alt ? emoji.paid[1] : emoji.paid[data.params.emoji],
+			done: alt ? emoji.done[1] : emoji.done[data.params.emoji]
+		};
+}
+
 function buildClaims() {
 	document.getElementById("claimB").disabled = gamesToClaim.length == 0;
 	document.getElementById("claimGamesDiv").innerHTML = "";
@@ -602,7 +623,7 @@ function buildClaims() {
 			let names = "";
 			g.claims.forEach(c => {
 				let cc = data.claimers.find(x => x.name == c);
-				let ce = !cc ? "" : cc.sent ? cc.paid ? "☑️" : "🎮" : cc.paid ? "💸" : "";
+				let ce = !cc ? "" : cc.sent ? cc.paid ? getEmoji().done : getEmoji().sent : cc.paid ? getEmoji().paid : "";
 				let name = ` <span class="badge text-bg-danger">${c} ${ce}</span>`;
 				names += name;
 			});
@@ -834,8 +855,11 @@ function migrate(storedData) {
 				case "USD":
 				default: updatedData.params.currency = "0"; break;
 			}
+			updatedData.params.misc.pricing = updatedData.params.hidePricing ? 0 : 1;
 		}
-		case 1: updatedData.version = 1;
+		case 1: {
+			updatedData.version = 1;
+		}
 	}
 	return updatedData;
 }
@@ -844,9 +868,25 @@ let storedData = JSON.parse(localStorage.getItem('data'));
 storedData = migrate(storedData);
 if (storedData) data = {
 	...data,
-	params: {...data.params, ...storedData.params},
+	params: {
+		...data.params, 
+		...storedData.params,
+		currencyOther: {
+			...data.params.currencyOther,
+			...storedData.params.currencyOther
+		},
+		customEmoji: {
+			...data.params.customEmoji,
+			...storedData.params.customEmoji
+		},
+		misc: {
+			...data.params.misc,
+			...storedData.params.misc
+		}
+	},
 	bundle: {...data.bundle, ...storedData.bundle},
-	claimers: storedData.claimers
+	claimers: storedData.claimers,
+	version: storedData.version
 };
 let slink = JSON.parse(localStorage.getItem('link'));
 if (slink) link = {
