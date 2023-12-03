@@ -45,7 +45,8 @@ var data = {
 			claims: []
 		}]
 	},
-	claimers: []
+	claimers: [],
+	version: 1
 };
 
 const emoji = {
@@ -91,7 +92,6 @@ function validate(name, value, index = -1) {
 		case "params.emoji": data.params.emoji = value; break;
 		case "params.text": data.params.text = value; break;
 	}
-
 
 	reCalc(false);
 	popForm(name, index);
