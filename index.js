@@ -855,7 +855,9 @@ function migrate(storedData) {
 				case "USD":
 				default: updatedData.params.currency = "0"; break;
 			}
-			updatedData.params.misc.pricing = updatedData.params.hidePricing ? 0 : 1;
+			updatedData.params.misc = {
+				pricing: updatedData.params.hidePricing ? 0 : 1
+			};
 		}
 		case 1: {
 			updatedData.version = 1;
