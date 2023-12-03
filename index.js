@@ -821,7 +821,27 @@ function consumeShareLink(sharedData) {
 	data.claimers = [];
 }
 
+function migrate(storedData) {
+	let updatedData = {...storedData};
+	switch(updatedData.version) {
+		case undefined:
+		case null:
+		case 0: {
+			updatedData.version = 0;
+			switch(updatedData.currency) {
+				case "EUR": updatedData.currency = 1; break;
+				case "GBP": updatedData.currency = 2; break;
+				case "USD":
+				default: updatedData.currency = 0; break;
+			}
+		}
+		case 1: updatedData.version = 1;
+	}
+	return updatedData;
+}
+
 let storedData = JSON.parse(localStorage.getItem('data'));
+storedData = migrate(storedData);
 if (storedData) data = {
 	...data,
 	params: {...data.params, ...storedData.params},
