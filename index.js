@@ -141,7 +141,7 @@ function popForm(ignore = "", index = -1) {
 	if (ignore != "params.paypalMin") document.getElementById("ppMin").value = formatCurr(data.params.paypalMin);
 	if (ignore != "params.gemsPrice") document.getElementById("gemPrice").value = formatCurr(data.params.gemsPrice);
 	if (ignore != "params.keyPrice") document.getElementById("keyPrice").value = data.params.keysPrice;
-	if (ignore != "params.customPayment") document.getElementById("customPayment").value = data.params.customPayment;
+	if (ignore != "params.customPayment") document.getElementById("customPayText").value = data.params.customPayment;
 	document.getElementById("byob").checked = data.bundle.type == 1;
 	if (ignore != "bundle.byob") document.getElementById("byobC").value = data.bundle.type != 1 ? null : data.bundle.byob;
 	document.getElementById("byobC").disabled = data.bundle.type != 1;
@@ -168,6 +168,9 @@ function popForm(ignore = "", index = -1) {
 	data.params.paypal && data.params.paypalGS
 		? document.getElementById("minOptions").classList.remove("hide")
 		: document.getElementById("minOptions").classList.add("hide");
+	data.params.customPay
+		? document.getElementById("customPayOptions").classList.remove("hide")
+		: document.getElementById("customPayOptions").classList.add("hide");
 	if (data.params.gems) {
 		document.getElementById("steamOptions").classList.remove("hide");
 		document.getElementById("keys").checked = data.params.keys;
