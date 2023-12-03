@@ -389,9 +389,9 @@ function buildText() {
 	
 	let footer = `\n${boldify('Payment:')}\n`;
 	if (data.params.paypal)
-		footer += `PayPal ${data.params.currency} ${data.params.paypalGS ? "G&S" : "F&F"} ${fees}\n`;
+		footer += `PayPal ${getCurr(data.params.currency).code} ${data.params.paypalGS ? "G&S" : "F&F"} ${fees}\n`;
 	if (data.params.revolut)
-		footer += `Revolut ${data.params.currency}\n`;
+		footer += `Revolut ${getCurr(data.params.currency).code}\n`;
 	if (data.params.gems) {
 		footer += `Gems (${formatCurr(data.params.gemsPrice, true)} / ${emoji.sacks[data.params.emoji]})\n`;
 		if (data.params.keys)
@@ -829,10 +829,10 @@ function migrate(storedData) {
 		case 0: {
 			updatedData.version = 0;
 			switch(updatedData.currency) {
-				case "EUR": updatedData.currency = 1; break;
-				case "GBP": updatedData.currency = 2; break;
+				case "EUR": updatedData.params.currency = 1; break;
+				case "GBP": updatedData.params.currency = 2; break;
 				case "USD":
-				default: updatedData.currency = 0; break;
+				default: updatedData.params.currency = 0; break;
 			}
 		}
 		case 1: updatedData.version = 1;
