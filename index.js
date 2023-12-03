@@ -108,6 +108,7 @@ function getCurr(c) {
 		case 1: return {code: "EUR", symbol: "€", alignRight: true};
 		case 2: return {code: "GBP", symbol: "£", alignRight: false};
 		case 3: return data.params.currencyOther;
+		case 0:
 		default: return {code: "USD", symbol: "$", alignRight: false};
 	}
 }
@@ -828,7 +829,7 @@ function migrate(storedData) {
 		case null:
 		case 0: {
 			updatedData.version = 0;
-			switch(updatedData.currency) {
+			switch(updatedData.params.currency) {
 				case "EUR": updatedData.params.currency = 1; break;
 				case "GBP": updatedData.params.currency = 2; break;
 				case "USD":
