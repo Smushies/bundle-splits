@@ -236,6 +236,12 @@
 								<input id="keyPrice" type="number" step="1" class="form-control" oninput="validate('params.keysPrice', this.value)" onchange="popForm()">
 							</div></div>
 						</div>
+						<div id="customPayOptions" class="row">
+							<div class="col">
+								<label for="customPayText">Custom Payment Methods: </label>
+								<textarea id="customPayText" rows="2" class="form-control" oninput="validate('params.customPayment', this.value)" onchange="popForm()"></textarea>
+							</div>
+						</div>
 						<div class="row">
 							<div id="emojiOptions" class="col">
 									<label for="eOption">Emojis?</label>

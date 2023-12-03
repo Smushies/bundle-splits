@@ -13,7 +13,8 @@ var data = {
 		gemsPrice: 0.24,
 		keys: true,
 		keysPrice: 7500,
-		customPay: 0,
+		revolut: false,
+		customPay: false,
 		customPayment: "Bananas",
 		comments: "",
 		commentsBottom: 0,
@@ -75,6 +76,8 @@ function validate(name, value, index = -1) {
 		case "params.paypalGS": data.params.paypalGS = value; break;
 		case "params.paypalMin": data.params.paypalMin = parseFloat(value) || 0; break;
 		case "params.revolut": data.params.revolut = value; break;
+		case "params.customPay": data.params.customPay = value; break;
+		case "params.customPayment": data.params.customPayment = value; break;
 		case "params.gems": data.params.gems = value; break;
 		case "params.keys": data.params.keys = value; break;
 		case "params.gemsPrice": data.params.gemsPrice = parseFloat(value) || 0; break;
@@ -128,6 +131,7 @@ function popForm(ignore = "", index = -1) {
 	document.getElementById("revolut").checked = data.params.revolut;
 	document.getElementById("gems").checked = data.params.gems;
 	document.getElementById("keys").checked = data.params.keys;
+	document.getElementById("customPay").checked = data.params.customPay;
 	if (ignore != "params.currencyOther.code") document.getElementById("oCurrCode").value = data.params.currencyOther.code;
 	if (ignore != "params.currencyOther.symbol") document.getElementById("oCurrSymbol").value = data.params.currencyOther.symbol;
 	data.params.currencyOther.alignRight
@@ -137,6 +141,7 @@ function popForm(ignore = "", index = -1) {
 	if (ignore != "params.paypalMin") document.getElementById("ppMin").value = formatCurr(data.params.paypalMin);
 	if (ignore != "params.gemsPrice") document.getElementById("gemPrice").value = formatCurr(data.params.gemsPrice);
 	if (ignore != "params.keyPrice") document.getElementById("keyPrice").value = data.params.keysPrice;
+	if (ignore != "params.customPayment") document.getElementById("customPayment").value = data.params.customPayment;
 	document.getElementById("byob").checked = data.bundle.type == 1;
 	if (ignore != "bundle.byob") document.getElementById("byobC").value = data.bundle.type != 1 ? null : data.bundle.byob;
 	document.getElementById("byobC").disabled = data.bundle.type != 1;
@@ -376,7 +381,7 @@ function buildText() {
 		data.bundle.games.forEach(g => {
 			let gems = Math.ceil((g.price / data.params.gemsPrice) * 1000);
 			let gemsDisp = data.params.gems ? `${gems} ${emoji.gems[data.params.emoji]}` : "";
-			let priceDisp = data.params.paypal || data.params.revolut ? `${formatCurr(g.price, true)}${gemsDisp ? " (" + gemsDisp + ")" : ""}` : gemsDisp;
+			let priceDisp = data.params.paypal || data.params.revolut || data.params.customPay ? `${formatCurr(g.price, true)}${gemsDisp ? " (" + gemsDisp + ")" : ""}` : gemsDisp;
 			let gg = `${g.name}: ${priceDisp}`;
 			g.claims.forEach(c => {
 				let cc = data.claimers.find(x => x.name == c);
