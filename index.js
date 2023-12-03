@@ -93,6 +93,12 @@ function validate(name, value, index = -1) {
 		case "games.price": data.bundle.games[index - 1].price = parseFloat(value) || 0; link.valid = false; break;
 		case "bundle.byob": data.bundle.byob = parseInt(value) || 0; link.valid = false; break;
 		case "params.emoji": data.params.emoji = value; break;
+		case "params.customEmoji.gems": data.params.customEmoji.gems = value; break;
+		case "params.customEmoji.sacks": data.params.customEmoji.sacks = value; break;
+		case "params.customEmoji.tf2": data.params.customEmoji.tf2 = value; break;
+		case "params.customEmoji.sent": data.params.customEmoji.sent = value; break;
+		case "params.customEmoji.paid": data.params.customEmoji.paid = value; break;
+		case "params.customEmoji.done": data.params.customEmoji.done = value; break;
 		case "params.text": data.params.text = value; break;
 	}
 
@@ -152,12 +158,32 @@ function popForm(ignore = "", index = -1) {
 		case 0: document.getElementById("emojiD").checked = true; break;
 		case 1: document.getElementById("emojiE").checked = true; break;
 		case 2: document.getElementById("emojiT").checked = true; break;
+		case 3: document.getElementById("emojiC").checked = true; break;
 	}
 	switch(data.params.text) {
 		case -1:
 		case 0: document.getElementById("textD").checked = true; break;
 		case 1: document.getElementById("textS").checked = true; break;
 	}
+	
+	if (data.params.emoji == 3) {
+		data.params.gems
+			? document.getElementById("customEmojiOptions1").classList.remove("hide")
+			: document.getElementById("customEmojiOptions1").classList.add("hide");
+		data.params.keys
+			? document.getElementById("ceKeys").classList.remove("hide")
+			: document.getElementById("ceKeys").classList.add("hide");
+		document.getElementById("customEmojiOptions2").classList.remove("hide");
+	} else {
+		document.getElementById("customEmojiOptions1").classList.add("hide");
+		document.getElementById("customEmojiOptions2").classList.add("hide");
+	}
+	if (ignore != "params.customEmoji.gems") document.getElementById("ceGems").value = data.params.customEmoji.gems;
+	if (ignore != "params.customEmoji.sacks") document.getElementById("ceSacks").value = data.params.customEmoji.sacks;
+	if (ignore != "params.customEmoji.tf2") document.getElementById("ceKeys").value = data.params.customEmoji.tf2;
+	if (ignore != "params.customEmoji.sent") document.getElementById("ceSent").value = data.params.customEmoji.sent;
+	if (ignore != "params.customEmoji.paid") document.getElementById("cePaid").value = data.params.customEmoji.paid;
+	if (ignore != "params.customEmoji.done") document.getElementById("ceDone").value = data.params.customEmoji.done;
 
 	data.params.currency == 3
 		? document.getElementById("otherCurr").classList.remove("hide")
