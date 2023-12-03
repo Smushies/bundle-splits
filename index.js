@@ -333,46 +333,6 @@ function boldify(text) {
 	}
 }
 
-function gobbleShared(input) {
-	if (typeof input?.params?.currency !== "string" || typeof input.bundle.byob !== "number" || typeof input.bundle.discount !== "number" || typeof input.bundle.price !== "number" || typeof input.bundle.type !== "number")
-		throw new Error("Failed to check share link! (1)");
-			
-	input.bundle.games.forEach(g => {
-		if (typeof g.name !== "string" || typeof g.value !== "number" || typeof g.price !== "number" || typeof g.priceOverride !== "boolean")
-			throw new Error("Failed to check share link! (2)");
-	});
-	
-	switch(input.params.currency) {
-		case "USD":
-		case "EUR":
-		case "GBP": data.params.currency = input.params.currency; break;
-		default: throw new Error("Invalid Currency");
-	}
-	
-	if (input.bundle.byob > 0 && input.bundle.byob < 100)
-		data.bundle.byob = input.bundle.byob;
-		
-	data.bundle.discount = parseFloat(input.bundle.discount) || 0;
-	data.bundle.price = parseFloat(input.bundle.price) || 0;
-	
-	if (input.bundle.type == 0 || input.bundle.type == 1)
-		data.bundle.type = input.bundle.type;
-		
-	data.bundle.games = [];
-	
-	input.bundle.games.forEach(g => {
-		data.bundle.games.push({
-			name: g.name,
-			value: parseFloat(g.value) || 0,
-			price: parseFloat(g.price) || 0,
-			priceOverride: g.priceOverride === true ? true : false,
-			claims: []
-		});
-	});
-	
-	data.claimers = [];
-}
-
 function buildText() {
 	let taken = data.bundle.games.reduce((t,g) => t + g.claims.length, 0);
 	
@@ -833,10 +793,10 @@ function migrate(storedData) {
 		case 0: {
 			updatedData.version = 0;
 			switch(updatedData.params.currency) {
-				case "EUR": updatedData.params.currency = 1; break;
-				case "GBP": updatedData.params.currency = 2; break;
+				case "EUR": updatedData.params.currency = "1"; break;
+				case "GBP": updatedData.params.currency = "2"; break;
 				case "USD":
-				default: updatedData.params.currency = 0; break;
+				default: updatedData.params.currency = "0"; break;
 			}
 		}
 		case 1: updatedData.version = 1;
