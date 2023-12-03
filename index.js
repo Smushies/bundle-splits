@@ -105,10 +105,10 @@ function changeCurr() {
 
 function getCurr(c) {
 	switch(c) {
-		case 1: return {code: "EUR", symbol: "€", alignRight: true};
-		case 2: return {code: "GBP", symbol: "£", alignRight: false};
-		case 3: return data.params.currencyOther;
-		case 0:
+		case "1": return {code: "EUR", symbol: "€", alignRight: true};
+		case "2": return {code: "GBP", symbol: "£", alignRight: false};
+		case "3": return data.params.currencyOther;
+		case "0":
 		default: return {code: "USD", symbol: "$", alignRight: false};
 	}
 }
@@ -764,7 +764,8 @@ function generateShareLink() {
 			games: data.bundle.games.map(g => ({...g, claims: []})),
 			price: data.bundle.price,
 			type: data.bundle.type
-		}
+		},
+		version: data.version
 	};
 	let request = new XMLHttpRequest();
 	request.open("POST", "/split/splits/split.php", true);
@@ -783,6 +784,7 @@ function generateShareLink() {
 }
 
 function consumeShareLink(sharedData) {
+	sharedData = migrate(sharedData);
 	if (typeof sharedData?.params?.currency !== "string" || typeof sharedData.bundle.byob !== "number" || typeof sharedData.bundle.discount !== "number" || typeof sharedData.bundle.price !== "number" || typeof sharedData.bundle.type !== "number")
 		throw new Error("Failed to check share link! (1)");
 			
@@ -792,9 +794,10 @@ function consumeShareLink(sharedData) {
 	});
 	
 	switch(sharedData.params.currency) {
-		case "USD":
-		case "EUR":
-		case "GBP": data.params.currency = sharedData.params.currency; break;
+		case "0":
+		case "1":
+		case "2":
+		case "3": data.params.currency = sharedData.params.currency; break;
 		default: throw new Error("Invalid Currency");
 	}
 	
