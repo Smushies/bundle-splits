@@ -1,9 +1,10 @@
 var data = {
 	params: {
-		currency: "USD",
+		currency: 0,
 		currencyOther: {
 			code: "CNY",
-			symbol: "¥"
+			symbol: "¥",
+			alignRight: false
 		},
 		paypal: true,
 		paypalGS: true,
@@ -78,6 +79,9 @@ function validate(name, value, index = -1) {
 		case "params.gemsPrice": data.params.gemsPrice = parseFloat(value) || 0; break;
 		case "params.keysPrice": data.params.keysPrice = parseFloat(value) || 0; break;
 		case "params.currency": data.params.currency = value; link.valid = false; break;
+		case "params.currencyOther.code": data.params.currencyOther.code = value; break;
+		case "params.currencyOther.symbol": data.params.currencyOther.symbol = value; break;
+		case "params.currencyOther.alignRight": data.params.currencyOther.alignRight = value; break;
 		case "params.comments": data.params.comments = value; break;
 		case "params.commentBottom": data.params.commentBottom = value; break;
 		case "games.name": data.bundle.games[index - 1].name = value; link.valid = false; break;
@@ -94,18 +98,18 @@ function validate(name, value, index = -1) {
 }
 
 function changeCurr() {
-	Array.from(document.getElementsByClassName("curr")).forEach(e => e.textContent = getCurr(data.params.currency));
+	let c = getCurr(data.params.currency);
+	Array.from(document.getElementsByClassName("curr")).forEach(e => e.textContent = c.symbol);
 	document.getElementById("currency").value = data.params.currency;
 }
 
 function getCurr(c) {
-	let curr = "$";
 	switch(c) {
-		case "USD": curr = "$"; break;
-		case "EUR": curr = "€"; break;
-		case "GBP": curr = "£"; break;
+		case 1: return {code: "EUR", symbol: "€", alignRight: true};
+		case 2: return {code: "GBP", symbol: "£", alignRight: false};
+		case 3: return data.params.currencyOther;
+		default: return {code: "USD", symbol: "$", alignRight: false};
 	}
-	return curr;
 }
 
 function popForm(ignore = "", index = -1) {
@@ -123,6 +127,11 @@ function popForm(ignore = "", index = -1) {
 	document.getElementById("revolut").checked = data.params.revolut;
 	document.getElementById("gems").checked = data.params.gems;
 	document.getElementById("keys").checked = data.params.keys;
+	if (ignore != "params.currencyOther.code") document.getElementById("oCurrCode").value = data.params.currencyOther.code;
+	if (ignore != "params.currencyOther.symbol") document.getElementById("oCurrSymbol").value = data.params.currencyOther.symbol;
+	data.params.currencyOther.alignRight
+		? document.getElementById("cRight0").checked = true
+		: document.getElementById("cRight1").checked = true;
 	data.params.paypalGS ? document.getElementById("paypalGS").checked = true : document.getElementById("paypalFF").checked = true;
 	if (ignore != "params.paypalMin") document.getElementById("ppMin").value = formatCurr(data.params.paypalMin);
 	if (ignore != "params.gemsPrice") document.getElementById("gemPrice").value = formatCurr(data.params.gemsPrice);
@@ -144,6 +153,9 @@ function popForm(ignore = "", index = -1) {
 		case 1: document.getElementById("textS").checked = true; break;
 	}
 
+	data.params.currency == 3
+		? document.getElementById("otherCurr").classList.remove("hide")
+		: document.getElementById("otherCurr").classList.add("hide");
 	data.params.paypal
 		? document.getElementById("paypalOptions").classList.remove("hide")
 		: document.getElementById("paypalOptions").classList.add("hide");
@@ -302,12 +314,13 @@ function countChars() {
 }
 
 function formatCurr(value, symbol = false) {
+	let c = getCurr(data.params.currency);
 	let f = value.toLocaleString(navigator.language, { minimumFractionDigits: 2 });
 	
 	if (symbol)
-		f = data.params.currency == "EUR"
-			? `${value.toLocaleString("fr-FR", { minimumFractionDigits: 2 })}${getCurr(data.params.currency)}`
-			: `${getCurr(data.params.currency)}${value.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+		f = c.alignRight
+			? `${value.toLocaleString("fr-FR", { minimumFractionDigits: 2 })}${c.symbol}`
+			: `${c.symbol}${value.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 			
 	return f;
 }

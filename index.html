@@ -156,13 +156,34 @@
 					<div class="col form-group">
 						<div class="row">
 							<div class="col col-12 col-md-4">
-								<label for="currrency">Currency: </label>
+								<label for="currency">Currency: </label>
 								<select id="currency" class="form-select" onchange="validate('params.currency', this.value)">
-									<option value="USD" selected>USD</option>
-									<option value="EUR">EUR</option>
-									<option value="GBP">GBP</option>
-									<option value="other">Other</option>
+									<option value="0" selected>USD</option>
+									<option value="1">EUR</option>
+									<option value="2">GBP</option>
+									<option value="3">Other</option>
 								</select>
+							</div>
+							<div id="otherCurr" class="col col-12 col-md-8">
+								<div class="row">
+									<div class="col">
+										<label for="oCurrCode">Currency Code: </label>
+										<input id="oCurrCode" class="form-control" oninput="validate('params.currencyOther.code', this.value)" onchange="popForm()">
+									</div>
+									<div class="col">
+										<label for="oCurrSymbol">Currency Symbol: </label>
+									<input id="oCurrSymbol" class="form-control" oninput="validate('params.currencyOther.symbol', this.value)" onchange="popForm()">
+									</div>
+									<div class="col">
+										<label for="oCurrAlign">Symbol Alignment: </label>
+										<div id="oCurrAlign" class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="cRight" id="cRight0" autocomplete="off" onchange="validate('params.currencyOther.alignRight', event.target.checked ? false : true)">
+										<label class="btn btn-outline-secondary" for="cRight0">Left</label>
+										<input type="radio" class="btn-check" name="cRight" id="cRight1" autocomplete="off" onchange="validate('params.currencyOther.alignRight', event.target.checked ? true : false)">
+										<label class="btn btn-outline-secondary" for="cRight1">Right</label>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="row">
