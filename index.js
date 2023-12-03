@@ -131,8 +131,8 @@ function popForm(ignore = "", index = -1) {
 	if (ignore != "params.currencyOther.code") document.getElementById("oCurrCode").value = data.params.currencyOther.code;
 	if (ignore != "params.currencyOther.symbol") document.getElementById("oCurrSymbol").value = data.params.currencyOther.symbol;
 	data.params.currencyOther.alignRight
-		? document.getElementById("cRight0").checked = true
-		: document.getElementById("cRight1").checked = true;
+		? document.getElementById("cRight1").checked = true
+		: document.getElementById("cRight0").checked = true;
 	data.params.paypalGS ? document.getElementById("paypalGS").checked = true : document.getElementById("paypalFF").checked = true;
 	if (ignore != "params.paypalMin") document.getElementById("ppMin").value = formatCurr(data.params.paypalMin);
 	if (ignore != "params.gemsPrice") document.getElementById("gemPrice").value = formatCurr(data.params.gemsPrice);
