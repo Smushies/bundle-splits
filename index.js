@@ -109,6 +109,7 @@ function validate(name, value, index = -1) {
 		case "misc.taken": data.params.misc.taken = value; break;
 		case "misc.pricing": data.params.misc.pricing = value; break;
 		case "misc.payment": data.params.misc.payment = value; break;
+		case "misc.forceEmojiDirect": data.params.misc.forceEmojiDirect = value; break;
 	}
 
 	reCalc(false);
@@ -263,7 +264,10 @@ function popForm(ignore = "", index = -1) {
 	data.params.keys
 		? document.getElementById("keyOptions").classList.remove("hide")
 		: document.getElementById("keyOptions").classList.add("hide");
-		
+	data.params.misc.forceEmojiDirect
+		? document.getElementById("forceEmoji").checked = true;
+		: document.getElementById("forceEmoji").checked = false;
+	
 	if (ignore != "params.comments") document.getElementById("comments").value = data.params.comments;
 	data.params.commentBottom
 		? document.getElementById("commentBottom").checked = true

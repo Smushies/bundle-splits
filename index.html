@@ -324,18 +324,25 @@
 								<label>Pricing Section: </label>
 								<div class="input-group btn-group" role="group">
 										<input type="radio" class="btn-check" name="miscPri" id="miscPri0" autocomplete="off" onchange="validate('misc.pricing', event.target.checked ? 0 : -1)">
-										<label class="btn btn-outline-secondary" for="miscPri0">Always Hide</label>
+										<label class="btn btn-outline-secondary" for="miscPri0">Hide</label>
 										<input type="radio" class="btn-check" name="miscPri" id="miscPri1" autocomplete="off" onchange="validate('misc.pricing', event.target.checked ? 1 : -1)">
-										<label class="btn btn-outline-secondary" for="miscPri1">Always Show</label>
+										<label class="btn btn-outline-secondary" for="miscPri1">Show</label>
 								</div>
 							</div>
 							<div class="col">
 								<label>Payment Section: </label>
 								<div class="input-group btn-group" role="group">
 										<input type="radio" class="btn-check" name="miscPay" id="miscPay0" autocomplete="off" onchange="validate('misc.payment', event.target.checked ? 0 : -1)">
-										<label class="btn btn-outline-secondary" for="miscPay0">Always Hide</label>
+										<label class="btn btn-outline-secondary" for="miscPay0">Hide</label>
 										<input type="radio" class="btn-check" name="miscPay" id="miscPay1" autocomplete="off" onchange="validate('misc.payment', event.target.checked ? 1 : -1)">
-										<label class="btn btn-outline-secondary" for="miscPay1">Always Show</label>
+										<label class="btn btn-outline-secondary" for="miscPay1">Show</label>
+								</div>
+							</div>
+							<div class="col">
+								<label></label>
+								<div class="input-group btn-group" role="group">
+									<input type="checkbox" class="btn-check" id="forceEmoji" autocomplete="off" onchange="validate('misc.forceEmojiDirect', event.target.checked)">
+									<label class="btn btn-outline-secondary" for="forceEmoji">Force Emojis for DMs</label>
 								</div>
 							</div>
 						</div>
