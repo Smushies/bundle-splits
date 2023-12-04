@@ -124,7 +124,7 @@ function getEmoji(dm = false) {
 			done: emoji.done[1]
 		};
 	else if (data.params.emoji == 3)
-		return data.customEmoji;
+		return data.params.customEmoji;
 	else
 		return {
 			gems: emoji.gems[data.params.emoji],
