@@ -1,18 +1,40 @@
 var data = {
 	params: {
-		currency: "USD",
+		currency: 0,
+		currencyOther: {
+			code: "CNY",
+			symbol: "¥",
+			alignRight: false
+		},
 		paypal: true,
-		paypalGS: true,
+		paypalGS: false,
 		paypalMin: 0.20,
 		gems: true,
 		gemsPrice: 0.24,
 		keys: true,
 		keysPrice: 7500,
+		revolut: false,
+		customPay: false,
+		customPayment: "Bananas",
 		comments: "",
 		commentsBottom: 0,
 		emoji: 0,
+		customEmoji: {
+			gems: "💎",
+			sacks: "1000💎",
+			tf2: "🔑",
+			sent: "🎮",
+			paid: "💸",
+			done: "✅"
+		},
 		text: 0,
-		hidePricing: false
+		misc: {
+			available: 1,
+			taken: 1,
+			pricing: 1,
+			payment: 1,
+			forceEmojiDirect: false
+		}
 	},
 	bundle: {
 		name: "",
@@ -30,7 +52,8 @@ var data = {
 			claims: []
 		}]
 	},
-	claimers: []
+	claimers: [],
+	version: 2
 };
 
 const emoji = {
@@ -39,7 +62,7 @@ const emoji = {
 		tf2: [":Tf2key:", "🔑", "tf2 keys"],
 		sent: ["🎮", "🎮", "(sent)"],
 		paid: ["💸", "💸", "(paid)"],
-		done: ["☑️", "☑️", "(done)"],
+		done: ["✅", "✅", "(done)"]
 };
 
 var gamesToClaim = [];
@@ -54,16 +77,20 @@ function validate(name, value, index = -1) {
 		case "bundle.price": data.bundle.price = parseFloat(value) || 0; link.valid = false; break;
 		case "bundle.discount": data.bundle.discount = parseFloat(value / 100) || 0; link.valid = false; break;
 		case "bundle.count": data.bundle.count = parseInt(value) || 0; break;
-		case "params.hidePricing": data.params.hidePricing = value; break;
 		case "params.paypal": data.params.paypal = value; break;
 		case "params.paypalGS": data.params.paypalGS = value; break;
 		case "params.paypalMin": data.params.paypalMin = parseFloat(value) || 0; break;
 		case "params.revolut": data.params.revolut = value; break;
+		case "params.customPay": data.params.customPay = value; break;
+		case "params.customPayment": data.params.customPayment = value; break;
 		case "params.gems": data.params.gems = value; break;
 		case "params.keys": data.params.keys = value; break;
 		case "params.gemsPrice": data.params.gemsPrice = parseFloat(value) || 0; break;
 		case "params.keysPrice": data.params.keysPrice = parseFloat(value) || 0; break;
 		case "params.currency": data.params.currency = value; link.valid = false; break;
+		case "currencyOther.code": data.params.currencyOther.code = value; break;
+		case "currencyOther.symbol": data.params.currencyOther.symbol = value; break;
+		case "currencyOther.alignRight": data.params.currencyOther.alignRight = value; break;
 		case "params.comments": data.params.comments = value; break;
 		case "params.commentBottom": data.params.commentBottom = value; break;
 		case "games.name": data.bundle.games[index - 1].name = value; link.valid = false; break;
@@ -71,27 +98,62 @@ function validate(name, value, index = -1) {
 		case "games.price": data.bundle.games[index - 1].price = parseFloat(value) || 0; link.valid = false; break;
 		case "bundle.byob": data.bundle.byob = parseInt(value) || 0; link.valid = false; break;
 		case "params.emoji": data.params.emoji = value; break;
+		case "customEmoji.gems": data.params.customEmoji.gems = value; break;
+		case "customEmoji.sacks": data.params.customEmoji.sacks = value; break;
+		case "customEmoji.tf2": data.params.customEmoji.tf2 = value; break;
+		case "customEmoji.sent": data.params.customEmoji.sent = value; break;
+		case "customEmoji.paid": data.params.customEmoji.paid = value; break;
+		case "customEmoji.done": data.params.customEmoji.done = value; break;
 		case "params.text": data.params.text = value; break;
+		case "misc.available": data.params.misc.available = value; break;
+		case "misc.taken": data.params.misc.taken = value; break;
+		case "misc.pricing": data.params.misc.pricing = value; break;
+		case "misc.payment": data.params.misc.payment = value; break;
+		case "misc.forceEmojiDirect": data.params.misc.forceEmojiDirect = value; break;
 	}
-
 
 	reCalc(false);
 	popForm(name, index);
 }
 
+function getEmoji(dm = false) {
+	let force = data.params.misc.forceEmojiDirect && dm;
+	if (force)
+		return {
+			gems: emoji.gems[1],
+			sacks: emoji.sacks[1],
+			tf2: emoji.tf2[1],
+			sent: emoji.sent[1],
+			paid: emoji.paid[1],
+			done: emoji.done[1]
+		};
+	else if (data.params.emoji == 3)
+		return data.params.customEmoji;
+	else
+		return {
+			gems: emoji.gems[data.params.emoji],
+			sacks: emoji.sacks[data.params.emoji],
+			tf2: emoji.tf2[data.params.emoji],
+			sent: emoji.sent[data.params.emoji],
+			paid: emoji.paid[data.params.emoji],
+			done: emoji.done[data.params.emoji]
+		};
+}
+
 function changeCurr() {
-	Array.from(document.getElementsByClassName("curr")).forEach(e => e.textContent = getCurr(data.params.currency));
+	let c = getCurr(data.params.currency);
+	Array.from(document.getElementsByClassName("curr")).forEach(e => e.textContent = c.symbol);
 	document.getElementById("currency").value = data.params.currency;
 }
 
 function getCurr(c) {
-	let curr = "$";
 	switch(c) {
-		case "USD": curr = "$"; break;
-		case "EUR": curr = "€"; break;
-		case "GBP": curr = "£"; break;
+		case "1": return {code: "EUR", symbol: "€", alignRight: true};
+		case "2": return {code: "GBP", symbol: "£", alignRight: false};
+		case "3": return data.params.currencyOther;
+		case "0":
+		default: return {code: "USD", symbol: "$", alignRight: false};
 	}
-	return curr;
 }
 
 function popForm(ignore = "", index = -1) {
@@ -104,15 +166,21 @@ function popForm(ignore = "", index = -1) {
 		document.getElementById("emojiD").disabled = false;
 	if (ignore != "bundle.price") document.getElementById("bPrice").value = formatCurr(data.bundle.price);
 	if (ignore != "bundle.discount") document.getElementById("discount").value = data.bundle.discount * 100;
-	document.getElementById("hidePricing").checked = data.params.hidePricing;
 	document.getElementById("paypal").checked = data.params.paypal;
 	document.getElementById("revolut").checked = data.params.revolut;
 	document.getElementById("gems").checked = data.params.gems;
 	document.getElementById("keys").checked = data.params.keys;
+	document.getElementById("customPay").checked = data.params.customPay;
+	if (ignore != "currencyOther.code") document.getElementById("oCurrCode").value = data.params.currencyOther.code;
+	if (ignore != "currencyOther.symbol") document.getElementById("oCurrSymbol").value = data.params.currencyOther.symbol;
+	data.params.currencyOther.alignRight
+		? document.getElementById("cRight1").checked = true
+		: document.getElementById("cRight0").checked = true;
 	data.params.paypalGS ? document.getElementById("paypalGS").checked = true : document.getElementById("paypalFF").checked = true;
 	if (ignore != "params.paypalMin") document.getElementById("ppMin").value = formatCurr(data.params.paypalMin);
 	if (ignore != "params.gemsPrice") document.getElementById("gemPrice").value = formatCurr(data.params.gemsPrice);
 	if (ignore != "params.keyPrice") document.getElementById("keyPrice").value = data.params.keysPrice;
+	if (ignore != "params.customPayment") document.getElementById("customPayText").value = data.params.customPayment;
 	document.getElementById("byob").checked = data.bundle.type == 1;
 	if (ignore != "bundle.byob") document.getElementById("byobC").value = data.bundle.type != 1 ? null : data.bundle.byob;
 	document.getElementById("byobC").disabled = data.bundle.type != 1;
@@ -123,19 +191,67 @@ function popForm(ignore = "", index = -1) {
 		case 0: document.getElementById("emojiD").checked = true; break;
 		case 1: document.getElementById("emojiE").checked = true; break;
 		case 2: document.getElementById("emojiT").checked = true; break;
+		case 3: document.getElementById("emojiC").checked = true; break;
 	}
 	switch(data.params.text) {
 		case -1:
 		case 0: document.getElementById("textD").checked = true; break;
 		case 1: document.getElementById("textS").checked = true; break;
 	}
+	switch(data.params.misc.available) {
+		case -1:
+		case 0: document.getElementById("miscAva0").checked = true; break;
+		case 1: document.getElementById("miscAva1").checked = true; break;
+		case 2: document.getElementById("miscAva2").checked = true; break;
+	}
+	switch(data.params.misc.taken) {
+		case -1:
+		case 0: document.getElementById("miscTak0").checked = true; break;
+		case 1: document.getElementById("miscTak1").checked = true; break;
+		case 2: document.getElementById("miscTak2").checked = true; break;
+	}
+	switch(data.params.misc.pricing) {
+		case -1:
+		case 0: document.getElementById("miscPri0").checked = true; break;
+		case 1: document.getElementById("miscPri1").checked = true; break;
+	}
+	switch(data.params.misc.payment) {
+		case -1:
+		case 0: document.getElementById("miscPay0").checked = true; break;
+		case 1: document.getElementById("miscPay1").checked = true; break;
+	}
+	
+	if (data.params.emoji == 3) {
+		data.params.gems
+			? document.getElementById("customEmojiOptions1").classList.remove("hide")
+			: document.getElementById("customEmojiOptions1").classList.add("hide");
+		data.params.keys
+			? document.getElementById("ceKeys").classList.remove("hide")
+			: document.getElementById("ceKeys").classList.add("hide");
+		document.getElementById("customEmojiOptions2").classList.remove("hide");
+	} else {
+		document.getElementById("customEmojiOptions1").classList.add("hide");
+		document.getElementById("customEmojiOptions2").classList.add("hide");
+	}
+	if (ignore != "customEmoji.gems") document.getElementById("ceGems").value = data.params.customEmoji.gems;
+	if (ignore != "customEmoji.sacks") document.getElementById("ceSacks").value = data.params.customEmoji.sacks;
+	if (ignore != "customEmoji.tf2") document.getElementById("ceKeys").value = data.params.customEmoji.tf2;
+	if (ignore != "customEmoji.sent") document.getElementById("ceSent").value = data.params.customEmoji.sent;
+	if (ignore != "customEmoji.paid") document.getElementById("cePaid").value = data.params.customEmoji.paid;
+	if (ignore != "customEmoji.done") document.getElementById("ceDone").value = data.params.customEmoji.done;
 
+	data.params.currency == 3
+		? document.getElementById("otherCurr").classList.remove("hide")
+		: document.getElementById("otherCurr").classList.add("hide");
 	data.params.paypal
 		? document.getElementById("paypalOptions").classList.remove("hide")
 		: document.getElementById("paypalOptions").classList.add("hide");
 	data.params.paypal && data.params.paypalGS
 		? document.getElementById("minOptions").classList.remove("hide")
 		: document.getElementById("minOptions").classList.add("hide");
+	data.params.customPay
+		? document.getElementById("customPayOptions").classList.remove("hide")
+		: document.getElementById("customPayOptions").classList.add("hide");
 	if (data.params.gems) {
 		document.getElementById("steamOptions").classList.remove("hide");
 		document.getElementById("keys").checked = data.params.keys;
@@ -148,7 +264,10 @@ function popForm(ignore = "", index = -1) {
 	data.params.keys
 		? document.getElementById("keyOptions").classList.remove("hide")
 		: document.getElementById("keyOptions").classList.add("hide");
-		
+	data.params.misc.forceEmojiDirect
+		? document.getElementById("forceEmoji").checked = true
+		: document.getElementById("forceEmoji").checked = false;
+	
 	if (ignore != "params.comments") document.getElementById("comments").value = data.params.comments;
 	data.params.commentBottom
 		? document.getElementById("commentBottom").checked = true
@@ -233,10 +352,10 @@ function reCalc(pop = true) {
 			let sum = data.bundle.games.reduce((s, g) => g.priceOverride ? s : s + g.value, 0);
 			bundlePrice -= data.bundle.games.reduce((s, g) => g.priceOverride ? s + g.price : s, 0);
 			data.bundle.ratio = sum != 0 ? bundlePrice / sum : 0;
-			data.bundle.games.forEach(g => { if (!g.priceOverride) g.price = Math.ceil(g.value * data.bundle.ratio * 100) / 100});
+			data.bundle.games.forEach(g => { if (!g.priceOverride) g.price = Math.ceil(g.value * data.bundle.ratio * 100) / 100;});
 			break;
 		case 1:
-			if (!(data.bundle.byob > 0)) data.bundle.byob = data.bundle.games.length;
+			if (data.bundle.byob <= 0) data.bundle.byob = data.bundle.games.length;
 			data.bundle.games.forEach(g => g.price = Math.ceil((bundlePrice / data.bundle.byob) * 100) / 100);
 			break;
 	}
@@ -288,12 +407,13 @@ function countChars() {
 }
 
 function formatCurr(value, symbol = false) {
+	let c = getCurr(data.params.currency);
 	let f = value.toLocaleString(navigator.language, { minimumFractionDigits: 2 });
 	
 	if (symbol)
-		f = data.params.currency == "EUR"
-			? `${value.toLocaleString("fr-FR", { minimumFractionDigits: 2 })}${getCurr(data.params.currency)}`
-			: `${getCurr(data.params.currency)}${value.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+		f = c.alignRight
+			? `${value.toLocaleString(navigator.language, { minimumFractionDigits: 2 })}${c.symbol}`
+			: `${c.symbol}${value.toLocaleString(navigator.language, { minimumFractionDigits: 2 })}`;
 			
 	return f;
 }
@@ -305,52 +425,12 @@ function boldify(text) {
 	}
 }
 
-function gobbleShared(input) {
-	if (typeof input?.params?.currency !== "string" || typeof input.bundle.byob !== "number" || typeof input.bundle.discount !== "number" || typeof input.bundle.price !== "number" || typeof input.bundle.type !== "number")
-		throw new Error("Failed to check share link! (1)");
-			
-	input.bundle.games.forEach(g => {
-		if (typeof g.name !== "string" || typeof g.value !== "number" || typeof g.price !== "number" || typeof g.priceOverride !== "boolean")
-			throw new Error("Failed to check share link! (2)");
-	});
-	
-	switch(input.params.currency) {
-		case "USD":
-		case "EUR":
-		case "GBP": data.params.currency = input.params.currency; break;
-		default: throw new Error("Invalid Currency");
-	}
-	
-	if (input.bundle.byob > 0 && input.bundle.byob < 100)
-		data.bundle.byob = input.bundle.byob;
-		
-	data.bundle.discount = parseFloat(input.bundle.discount) || 0;
-	data.bundle.price = parseFloat(input.bundle.price) || 0;
-	
-	if (input.bundle.type == 0 || input.bundle.type == 1)
-		data.bundle.type = input.bundle.type;
-		
-	data.bundle.games = [];
-	
-	input.bundle.games.forEach(g => {
-		data.bundle.games.push({
-			name: g.name,
-			value: parseFloat(g.value) || 0,
-			price: parseFloat(g.price) || 0,
-			priceOverride: g.priceOverride === true ? true : false,
-			claims: []
-		});
-	});
-	
-	data.claimers = [];
-}
-
 function buildText() {
 	let taken = data.bundle.games.reduce((t,g) => t + g.claims.length, 0);
 	
 	let area = document.getElementById("copy");
 	let a = data.bundle.type == 1 ? `${boldify('Available:')} (${data.bundle.byob * data.bundle.count - taken}/${data.bundle.byob * data.bundle.count})\n` : `${boldify('Available:')}\n`;
-	let t = data.bundle.type == 1 ? `\n${boldify('Taken:')} (${taken}/${data.bundle.byob * data.bundle.count})\n` : `\n${boldify('Taken:')}\n`;
+	let t = data.bundle.type == 1 ? `${boldify('Taken:')} (${taken}/${data.bundle.byob * data.bundle.count})\n` : `${boldify('Taken:')}\n`;
 	let curr = getCurr(data.params.currency);
 	let bundlePrice = data.bundle.discount != 1 ? Math.ceil(data.bundle.price * (1 - data.bundle.discount) * 100) / 100 : 0;
 	let min = data.bundle.games.some(g => g.price < data.params.paypalMin)
@@ -360,15 +440,17 @@ function buildText() {
 		? `(I'll cover fees${min})`
 		: "";
 	
-	let footer = `\n${boldify('Payment:')}\n`;
+	let payment = `${boldify('Payment:')}\n`;
 	if (data.params.paypal)
-		footer += `PayPal ${data.params.currency} ${data.params.paypalGS ? "G&S" : "F&F"} ${fees}\n`;
+		payment += `PayPal ${getCurr(data.params.currency).code} ${data.params.paypalGS ? "G&S" : "F&F"} ${fees}\n`;
 	if (data.params.revolut)
-		footer += `Revolut ${data.params.currency}\n`;
+		payment += `Revolut ${getCurr(data.params.currency).code}\n`;
+	if (data.params.customPay)
+		payment += data.params.customPayment + "\n";
 	if (data.params.gems) {
-		footer += `Gems (${formatCurr(data.params.gemsPrice, true)} / ${emoji.sacks[data.params.emoji]})\n`;
+		payment += `Gems (${formatCurr(data.params.gemsPrice, true)} / ${getEmoji().sacks})\n`;
 		if (data.params.keys)
-			footer += `TF2 Keys (${emoji.tf2[data.params.emoji]} 1:${data.params.keysPrice} ${emoji.gems[data.params.emoji]})\n`;
+			payment += `TF2 Keys (${getEmoji().tf2} 1:${data.params.keysPrice} ${getEmoji().gems})\n`;
 	}
 
 	if (data.bundle.type == 1) {
@@ -378,7 +460,8 @@ function buildText() {
 			
 			g.claims.forEach(c => {
 				let cc = data.claimers.find(x => x.name == c);
-				let ce = !cc ? "" : cc.sent ? cc.paid ? emoji.done[data.params.emoji] : emoji.sent[data.params.emoji] : cc.paid ? emoji.paid[data.params.emoji] : "";
+				let ce = !cc ? "" : cc.sent ? cc.paid ? getEmoji().done : getEmoji().sent : cc.paid ? getEmoji().paid : "";
+				if (ce.length > 0) ce += " ";
 				t += `${ce}${g.name} - ${c}\n`;
 			});
 		});
@@ -386,12 +469,13 @@ function buildText() {
 	else {
 		data.bundle.games.forEach(g => {
 			let gems = Math.ceil((g.price / data.params.gemsPrice) * 1000);
-			let gemsDisp = data.params.gems ? `${gems} ${emoji.gems[data.params.emoji]}` : "";
-			let priceDisp = data.params.paypal || data.params.revolut ? `${formatCurr(g.price, true)}${gemsDisp ? " (" + gemsDisp + ")" : ""}` : gemsDisp;
+			let gemsDisp = data.params.gems ? `${gems} ${getEmoji().gems}` : "";
+			let priceDisp = data.params.paypal || data.params.revolut || data.params.customPay ? `${formatCurr(g.price, true)}${gemsDisp ? " (" + gemsDisp + ")" : ""}` : gemsDisp;
 			let gg = `${g.name}: ${priceDisp}`;
 			g.claims.forEach(c => {
 				let cc = data.claimers.find(x => x.name == c);
-				let ce = !cc ? "" : cc.sent ? cc.paid ? emoji.done[data.params.emoji] : emoji.sent[data.params.emoji] : cc.paid ? emoji.paid[data.params.emoji] : "";
+				let ce = !cc ? "" : cc.sent ? cc.paid ? getEmoji().done : getEmoji().sent : cc.paid ? getEmoji().paid : "";
+				if (ce.length > 0) ce += " ";
 				t += `${ce}${gg} - ${c}\n`;
 			});
 			
@@ -406,17 +490,40 @@ function buildText() {
 	let p1 = data.bundle.games.reduce((t, g) => g.priceOverride ? t : t + g.value, 0);
 	let p2 = bundlePrice - data.bundle.games.reduce((t, g) => g.priceOverride ? t + g.price : t, 0);
 	
-	let gems = data.params.gems ? ` (${Math.ceil((data.bundle.games[0].price / data.params.gemsPrice) * 1000)} ${emoji.gems[data.params.emoji]})\n` : "\n";
+	let gems = data.params.gems ? ` (${Math.ceil((data.bundle.games[0].price / data.params.gemsPrice) * 1000)} ${getEmoji().gems})\n` : "\n";
 	
 	let pricing = data.bundle.type == 1
-		? `\n${boldify('Pricing:')} ${formatCurr(bundlePrice, true)} / ${data.bundle.byob} = ${boldify(formatCurr(data.bundle.games[0].price, true), true)}${gems}`
-		: `\n${boldify('Pricing:')} ~${Math.floor(data.bundle.ratio*100)}% of gg.deals price${data.bundle.games.some(g => g.priceOverride) ? ` with ${boldify('modifications', true)}` : ""} (${formatCurr(p1, true)} / ${formatCurr(p2, true)}).\n`;
+		? `${boldify('Pricing:')} ${formatCurr(bundlePrice, true)} / ${data.bundle.byob} = ${boldify(formatCurr(data.bundle.games[0].price, true), true)}${gems}`
+		: `${boldify('Pricing:')} ~${Math.floor(data.bundle.ratio*100)}% of gg.deals price${data.bundle.games.some(g => g.priceOverride) ? " with " + boldify('modifications', true) : ""} (${formatCurr(p1, true)} / ${formatCurr(p2, true)}).\n`;
 	
-	let comments = data.params.comments ? data.params.commentBottom ? `\n${data.params.comments}` : `${data.params.comments}\n\n` : "";
+	let comments = data.params.comments ? data.params.commentBottom ? `\n\n${data.params.comments}` : `${data.params.comments}\n\n` : "";
 	
+	switch(data.params.misc.available) {
+		case 0: a = ""; break;
+		case 2: {
+			if (data.bundle.type == 1 && data.bundle.byob * data.bundle.count - taken == 0) { a = ""; break; }
+			if (data.bundle.games.reduce((t, g) => t + (data.bundle.count - g.claims.length), 0) <= 0) {a = ""; break; }
+		}
+	}
+	switch(data.params.misc.taken) {
+		case 0: t = ""; break;
+		case 2: {
+			if (data.bundle.games.reduce((t, g) => t + g.claims.length, 0) <= 0) {t = ""; break; }
+		}
+		case 1: if (a != "") t = `\n${t}`; break;
+	}
+	switch(data.params.misc.pricing) {
+		case 0: pricing = ""; break;
+		case 1: if(a != "" || t != "") pricing = `\n${pricing}`; break;
+	}
+	switch(data.params.misc.payment) {
+		case 0: payment = ""; break;
+		case 1: if(a != "" || t != "" || pricing != "") payment = `\n${payment}`; break;
+	}
+
 	area.value = data.params.commentBottom
-		? `${a}${t}${data.params.hidePricing ? "" : pricing}${footer}${comments}`
-		: `${comments}${a}${t}${data.params.hidePricing ? "" : pricing}${footer}`;
+		? `${a}${t}${pricing}${payment}${comments}`
+		: `${comments}${a}${t}${pricing}${payment}`;
 	countChars();
 	
 	let area2 = document.getElementById("priv");
@@ -450,8 +557,8 @@ function buildText() {
 		
 		let pprs = data.params.paypal || data.params.revolut ? `${formatCurr(u.price, true)}` : "";
 		let gems = Math.ceil((u.price / data.params.gemsPrice) * 1000);
-		let keys = data.params.gems && data.params.keys && gems > data.params.keysPrice ? ` or ${Math.floor(gems / data.params.keysPrice)} ${emoji.tf2[data.params.emoji < 2 ? 1 : data.params.emoji]} + ${gems % data.params.keysPrice} ${emoji.gems[data.params.emoji < 2 ? 1 : data.params.emoji]}` : "";
-		gems = data.params.gems ? data.params.paypal || data.params.revolut ? ` or ${gems} ${emoji.gems[data.params.emoji < 2 ? 1 : data.params.emoji]}` : `${gems} ${emoji.gems[data.params.emoji < 2 ? 1 : data.params.emoji]}` : "";
+		let keys = data.params.gems && data.params.keys && gems > data.params.keysPrice ? ` or ${Math.floor(gems / data.params.keysPrice)} ${getEmoji(true).tf2} + ${gems % data.params.keysPrice} ${getEmoji(true).gems}` : "";
+		gems = data.params.gems ? data.params.paypal || data.params.revolut ? ` or ${gems} ${getEmoji(true).gems}` : `${gems} ${getEmoji(true).gems}` : "";
 		
 		p += `Price: ${pprs}${gems}${keys}\n\n`;
 	});
@@ -576,7 +683,7 @@ function buildClaims() {
 			let names = "";
 			g.claims.forEach(c => {
 				let cc = data.claimers.find(x => x.name == c);
-				let ce = !cc ? "" : cc.sent ? cc.paid ? "☑️" : "🎮" : cc.paid ? "💸" : "";
+				let ce = !cc ? "" : cc.sent ? cc.paid ? getEmoji().done : getEmoji().sent : cc.paid ? getEmoji().paid : "";
 				let name = ` <span class="badge text-bg-danger">${c} ${ce}</span>`;
 				names += name;
 			});
@@ -708,7 +815,7 @@ function pickBundle() {
 			xhttp.open("GET", `https://barter.vg/i/${id}/json/`, true);
 			xhttp.send();
 		});
-	}
+	};
 	
 	let promises = [];
 	pick.games.forEach(game => {
@@ -734,14 +841,15 @@ function generateShareLink() {
 			games: data.bundle.games.map(g => ({...g, claims: []})),
 			price: data.bundle.price,
 			type: data.bundle.type
-		}
+		},
+		version: data.version
 	};
 	let request = new XMLHttpRequest();
 	request.open("POST", "/split/splits/split.php", true);
 	request.setRequestHeader("Content-type", "application/json");
 	request.onreadystatechange = () => {
 		if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
-			link.url = `${document.location.host}/split?share=${request.response}`;
+			link.url = `https://${document.location.host}/split?share=${request.response}`;
 			link.valid = true;
 			localStorage.setItem('link', JSON.stringify(link));
 			document.getElementById("linkValid").classList.remove("border-warning");
@@ -753,6 +861,7 @@ function generateShareLink() {
 }
 
 function consumeShareLink(sharedData) {
+	sharedData = migrate(sharedData);
 	if (typeof sharedData?.params?.currency !== "string" || typeof sharedData.bundle.byob !== "number" || typeof sharedData.bundle.discount !== "number" || typeof sharedData.bundle.price !== "number" || typeof sharedData.bundle.type !== "number")
 		throw new Error("Failed to check share link! (1)");
 			
@@ -762,9 +871,10 @@ function consumeShareLink(sharedData) {
 	});
 	
 	switch(sharedData.params.currency) {
-		case "USD":
-		case "EUR":
-		case "GBP": data.params.currency = sharedData.params.currency; break;
+		case "0":
+		case "1":
+		case "2":
+		case "3": data.params.currency = sharedData.params.currency; break;
 		default: throw new Error("Invalid Currency");
 	}
 	
@@ -792,12 +902,54 @@ function consumeShareLink(sharedData) {
 	data.claimers = [];
 }
 
+function migrate(storedData) {
+	let updatedData = {...storedData};
+	switch(updatedData.version) {
+		case undefined:
+		case null:
+		case 0: {
+			switch(updatedData.params.currency) {
+				case "EUR": updatedData.params.currency = "1"; break;
+				case "GBP": updatedData.params.currency = "2"; break;
+				case "USD":
+				default: updatedData.params.currency = "0"; break;
+			}
+			updatedData.params.misc = {
+				pricing: updatedData.params.hidePricing ? 0 : 1
+			};
+			delete updatedData.params.hidePricing;
+			updatedData.version = 0;
+		}
+		case 1: {
+			updatedData.version = 1;
+		}
+	}
+	return updatedData;
+}
+
 let storedData = JSON.parse(localStorage.getItem('data'));
+storedData = migrate(storedData);
 if (storedData) data = {
 	...data,
-	params: {...data.params, ...storedData.params},
+	params: {
+		...data.params, 
+		...storedData.params,
+		currencyOther: {
+			...data.params.currencyOther,
+			...storedData.params.currencyOther
+		},
+		customEmoji: {
+			...data.params.customEmoji,
+			...storedData.params.customEmoji
+		},
+		misc: {
+			...data.params.misc,
+			...storedData.params.misc
+		}
+	},
 	bundle: {...data.bundle, ...storedData.bundle},
-	claimers: storedData.claimers
+	claimers: storedData.claimers,
+	version: storedData.version
 };
 let slink = JSON.parse(localStorage.getItem('link'));
 if (slink) link = {
@@ -817,7 +969,7 @@ if (shared) {
 		};
 		reCalc();
 		window.history.replaceState(null, "", "/split");
-	}).catch(err => {throw err});
+	}).catch(err => {throw err;});
 }
 
 reCalc();

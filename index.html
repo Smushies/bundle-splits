@@ -2,19 +2,18 @@
 <html data-bs-theme="dark">
 <head>
 	<title>Bundle Split Helper</title>
-	<meta charset="UTF-8"> 
-	<base href="./">
+	<meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-	
 	<link rel="stylesheet" href="/split/index.css">
 </head>
 <body>
 	<main class="container-xl">
 		<ul id="tabs" class="nav nav-tabs" role="tablist">
 			<li class="nav-item" role="presentation"><a class="nav-link active" href="#setup" data-bs-toggle="tab" data-bs-target="#setup" aria-controls="setup" role="tab" data-toggle="tab">Setup</a></li>
-			<li class="nav-item" role="presentation"><a class="nav-link" href="#claiming" data-bs-toggle="tab" data-bs-target="#claiming" aria-controls="claiming" role="tab" data-toggle="tab">Claiming</a></li>
+			<li class="nav-item" role="presentation"><a class="nav-link" href="#claiming" data-bs-toggle="tab" data-bs-target="#claiming" aria-controls="claiming" role="tab" data-toggle="tab">Claims</a></li>
+			<li class="nav-item" role="presentation"><a class="nav-link" href="#settings" data-bs-toggle="tab" data-bs-target="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
 			<li class="nav-item" role="presentation"><a class="nav-link" href="#export" data-bs-toggle="tab" data-bs-target="#export" aria-controls="export" role="tab" data-toggle="tab">Share</a></li>
 			<li class="nav-item ms-auto" role="presentation"><a class="nav-link" href="#help" data-bs-toggle="tab" data-bs-target="#help" aria-controls="help" role="tab" data-toggle="tab">Help</a></li>
 		</ul>
@@ -22,7 +21,7 @@
 		<div class="tab-content">
 			<div id="setup" role="tabpanel" class="tab-pane active">
 				<div class="row">
-					<div id="paramsDiv" class="col form-group col-12 col-xl-6">
+					<div id="paramsDiv" class="col form-group col-12 col-xxl-6">
 						<div class="row">
 							<div id="list1" class="col">
 								<label for="list">Barter.vg Bundles: <a href="javascript:toggleList(false)"><i class="bi bi-pencil"></i></a></label>
@@ -44,14 +43,6 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col">
-								<label for="currrency">Currency: </label>
-								<select id="currency" class="form-select" onchange="validate('params.currency', this.value)">
-									<option value="USD" selected>USD</option>
-									<option value="EUR">EUR</option>
-									<option value="GBP">GBP</option>
-								</select>
-							</div>
 							<div class="col">
 								<label for="bPrice">Bundle Price: </label>
 								<div class="input-group">
@@ -84,86 +75,6 @@
 						</div>
 						</br>
 						<div class="row">
-							<div class="col">
-								<label>Payment Options: </label>
-								<div class="input-group btn-group" role="group">
-									<input type="checkbox" class="btn-check" id="paypal" autocomplete="off" onchange="validate('params.paypal', event.target.checked)">
-									<label class="btn btn-outline-secondary" for="paypal">PayPal</label>
-									<input type="checkbox" class="btn-check" id="revolut" autocomplete="off" onchange="validate('params.revolut', event.target.checked)">
-									<label class="btn btn-outline-secondary" for="revolut">Revolut</label>
-									<input type="checkbox" class="btn-check" id="gems" autocomplete="off" onchange="validate('params.gems', event.target.checked)">
-									<label class="btn btn-outline-secondary" for="gems">Gems</label>
-									<input type="checkbox" class="btn-check" id="keys" autocomplete="off" onchange="validate('params.keys', event.target.checked)">
-									<label class="btn btn-outline-secondary" for="keys">TF2 Keys</label>
-								</div>
-							</div>
-						</div>
-						<div id="cashOptions" class="row">
-							<div class="col">
-								<div id="paypalOptions">
-									<label for="ppOption">PayPal Options: </label>
-									<div class="input-group btn-group" role="group">
-										<input type="radio" class="btn-check" name="ppOption" id="paypalFF" autocomplete="off" onchange="validate('params.paypalGS', !event.target.checked)">
-										<label class="btn btn-outline-secondary" for="paypalFF">Friends & Family</label>
-										<input type="radio" class="btn-check" name="ppOption" id="paypalGS" autocomplete="off" onchange="validate('params.paypalGS', event.target.checked)">
-										<label class="btn btn-outline-secondary" for="paypalGS">Goods & Services</label>
-									</div>
-								</div>
-							</div>
-							<div class="col"><div id="minOptions">
-								<label for="ppMin">Minimum Amount: </label>
-								<div class="input-group">
-									<span class="input-group-text curr">$</span>
-									<input id="ppMin" type="number" class="form-control" step="any" oninput="validate('params.paypalMin', this.value)" onchange="popForm()">
-								</div>
-							</div></div>
-						</div>
-						<div id="steamOptions" class="row">
-							<div id="gemOptions" class="col">
-								<label for="gemPrice">Sack of Gems Price: </label>
-								<div class="input-group">
-									<span class="input-group-text curr">$</span>
-									<input id="gemPrice" type="number" step="any" class="form-control" oninput="validate('params.gemsPrice', this.value)" onchange="popForm()">
-								</div>
-							</div>
-							<div class="col"><div id="keyOptions" >
-								<label for="keyPrice">Gems per Key: </label>
-								<input id="keyPrice" type="number" step="1" class="form-control" oninput="validate('params.keysPrice', this.value)" onchange="popForm()">
-							</div></div>
-						</div>
-						</br>
-						<div class="row">
-							<div class="col">
-								<label>&nbsp</label>
-								<div class="input-group btn-group">
-									<input type="checkbox" class="btn-check" id="hidePricing" autocomplete="off" onchange="validate('params.hidePricing', event.target.checked)">
-									<label class="btn btn-outline-secondary" for="hidePricing">Hide Pricing?</label>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div id="emojiOptions" class="col">
-									<label for="eOption">Emojis?</label>
-									<div class="input-group btn-group" role="group">
-										<input type="radio" class="btn-check" name="eOption" id="emojiD" autocomplete="off" onchange="validate('params.emoji', event.target.checked ? 0 : -1)">
-										<label class="btn btn-outline-secondary" for="emojiD">Discord</label>
-										<input type="radio" class="btn-check" name="eOption" id="emojiE" autocomplete="off" onchange="validate('params.emoji', event.target.checked ? 1 : -1)">
-										<label class="btn btn-outline-secondary" for="emojiE">Emoji</label>
-										<input type="radio" class="btn-check" name="eOption" id="emojiT" autocomplete="off" onchange="validate('params.emoji', event.target.checked ? 2 : -1)">
-										<label class="btn btn-outline-secondary" for="emojiT">Text</label>
-									</div>
-							</div>
-							<div id="textOptions" class="col">
-									<label for="tOption">Text Format?</label>
-									<div class="input-group btn-group" role="group">
-										<input type="radio" class="btn-check" name="tOption" id="textD" autocomplete="off" onchange="validate('params.text', event.target.checked ? 0 : -1)">
-										<label class="btn btn-outline-secondary" for="textD">Discord (Markdown)</label>
-										<input type="radio" class="btn-check" name="tOption" id="textS" autocomplete="off" onchange="validate('params.text', event.target.checked ? 1 : -1)">
-										<label class="btn btn-outline-secondary" for="textS">Steam</label>
-									</div>
-							</div>
-						</div>
-						<div class="row">
 							<label for="comments">Comments: </label>
 							<div class="input-group">
 								<textarea id="comments" type="text" class="form-control" oninput="validate('params.comments', this.value)" onchange="popForm()"></textarea>
@@ -177,8 +88,8 @@
 						</div>
 						</br>
 					</div>
-					<div id="gamesDiv" class="col form-group col-12 col-xl-6">
-						<table id="games" class="table table-borderless">
+					<div id="gamesDiv" class="col form-group col-12 col-xxl-6">
+						<table id="games" class="table table-borderless table-responsive-sm">
 							<tr>
 								<th>Game</th>
 								<th>Value</th>
@@ -238,6 +149,205 @@
 					</div>
 				</div>
 				</br>
+			</div>
+			<div id="settings" role="tabpanel" class="tab-pane">
+				<div class="row">
+					<div class="col form-group">
+						<div class="row">
+							<div class="col col-12 col-md-4">
+								<label for="currency">Currency: </label>
+								<select id="currency" class="form-select" onchange="validate('params.currency', this.value)">
+									<option value="0" selected>USD</option>
+									<option value="1">EUR</option>
+									<option value="2">GBP</option>
+									<option value="3">Other</option>
+								</select>
+							</div>
+							<div id="otherCurr" class="col col-12 col-md-8">
+								<div class="row">
+									<div class="col">
+										<label for="oCurrCode">Currency Code: </label>
+										<input id="oCurrCode" class="form-control" oninput="validate('currencyOther.code', this.value)" onchange="popForm()">
+									</div>
+									<div class="col">
+										<label for="oCurrSymbol">Currency Symbol: </label>
+									<input id="oCurrSymbol" class="form-control" oninput="validate('currencyOther.symbol', this.value)" onchange="popForm()">
+									</div>
+									<div class="col">
+										<label for="oCurrAlign">Symbol Alignment: </label>
+										<div id="oCurrAlign" class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="cRight" id="cRight0" autocomplete="off" onchange="validate('currencyOther.alignRight', event.target.checked ? false : true)">
+										<label class="btn btn-outline-secondary" for="cRight0">Left</label>
+										<input type="radio" class="btn-check" name="cRight" id="cRight1" autocomplete="off" onchange="validate('currencyOther.alignRight', event.target.checked ? true : false)">
+										<label class="btn btn-outline-secondary" for="cRight1">Right</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<label>Payment Options: </label>
+								<div class="input-group btn-group" role="group">
+									<input type="checkbox" class="btn-check" id="paypal" autocomplete="off" onchange="validate('params.paypal', event.target.checked)">
+									<label class="btn btn-outline-secondary" for="paypal">PayPal</label>
+									<input type="checkbox" class="btn-check" id="revolut" autocomplete="off" onchange="validate('params.revolut', event.target.checked)">
+									<label class="btn btn-outline-secondary" for="revolut">Revolut</label>
+									<input type="checkbox" class="btn-check" id="gems" autocomplete="off" onchange="validate('params.gems', event.target.checked)">
+									<label class="btn btn-outline-secondary" for="gems">Gems</label>
+									<input type="checkbox" class="btn-check" id="keys" autocomplete="off" onchange="validate('params.keys', event.target.checked)">
+									<label class="btn btn-outline-secondary" for="keys">TF2 Keys</label>
+									<input type="checkbox" class="btn-check" id="customPay" autocomplete="off" onchange="validate('params.customPay', event.target.checked)">
+									<label class="btn btn-outline-secondary" for="customPay">Custom</label>
+								</div>
+							</div>
+						</div>
+						<div id="cashOptions" class="row">
+							<div class="col">
+								<div id="paypalOptions">
+									<label for="ppOption">PayPal Options: </label>
+									<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="ppOption" id="paypalFF" autocomplete="off" onchange="validate('params.paypalGS', !event.target.checked)">
+										<label class="btn btn-outline-secondary" for="paypalFF">Friends & Family</label>
+										<input type="radio" class="btn-check" name="ppOption" id="paypalGS" autocomplete="off" onchange="validate('params.paypalGS', event.target.checked)">
+										<label class="btn btn-outline-secondary" for="paypalGS">Goods & Services</label>
+									</div>
+								</div>
+							</div>
+							<div class="col"><div id="minOptions">
+								<label for="ppMin">Minimum Amount: </label>
+								<div class="input-group">
+									<span class="input-group-text curr">$</span>
+									<input id="ppMin" type="number" class="form-control" step="any" oninput="validate('params.paypalMin', this.value)" onchange="popForm()">
+								</div>
+							</div></div>
+						</div>
+						<div id="steamOptions" class="row">
+							<div id="gemOptions" class="col">
+								<label for="gemPrice">Sack of Gems Price: </label>
+								<div class="input-group">
+									<span class="input-group-text curr">$</span>
+									<input id="gemPrice" type="number" step="any" class="form-control" oninput="validate('params.gemsPrice', this.value)" onchange="popForm()">
+								</div>
+							</div>
+							<div class="col"><div id="keyOptions" >
+								<label for="keyPrice">Gems per Key: </label>
+								<input id="keyPrice" type="number" step="1" class="form-control" oninput="validate('params.keysPrice', this.value)" onchange="popForm()">
+							</div></div>
+						</div>
+						<div id="customPayOptions" class="row">
+							<div class="col">
+								<label for="customPayText">Custom Payment Methods: </label>
+								<textarea id="customPayText" rows="2" class="form-control" oninput="validate('params.customPayment', this.value)" onchange="popForm()"></textarea>
+							</div>
+						</div>
+						</br>
+						<div class="row">
+							<div id="emojiOptions" class="col">
+									<label for="eOption">Emojis?</label>
+									<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="eOption" id="emojiD" autocomplete="off" onchange="validate('params.emoji', event.target.checked ? 0 : -1)">
+										<label class="btn btn-outline-secondary" for="emojiD">Discord</label>
+										<input type="radio" class="btn-check" name="eOption" id="emojiE" autocomplete="off" onchange="validate('params.emoji', event.target.checked ? 1 : -1)">
+										<label class="btn btn-outline-secondary" for="emojiE">Emoji</label>
+										<input type="radio" class="btn-check" name="eOption" id="emojiT" autocomplete="off" onchange="validate('params.emoji', event.target.checked ? 2 : -1)">
+										<label class="btn btn-outline-secondary" for="emojiT">Text</label>
+										<input type="radio" class="btn-check" name="eOption" id="emojiC" autocomplete="off" onchange="validate('params.emoji', event.target.checked ? 3 : -1)">
+										<label class="btn btn-outline-secondary" for="emojiC">Custom</label>
+									</div>
+							</div>
+							<div id="textOptions" class="col">
+									<label for="tOption">Text Format?</label>
+									<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="tOption" id="textD" autocomplete="off" onchange="validate('params.text', event.target.checked ? 0 : -1)">
+										<label class="btn btn-outline-secondary" for="textD">Discord (Markdown)</label>
+										<input type="radio" class="btn-check" name="tOption" id="textS" autocomplete="off" onchange="validate('params.text', event.target.checked ? 1 : -1)">
+										<label class="btn btn-outline-secondary" for="textS">Steam</label>
+									</div>
+							</div>
+						</div>
+						<div id="customEmojiOptions1" class="row">
+							<div class="col">
+								<label for="ceGems">Gems Symbol: </label>
+								<input id="ceGems" class="form-control" oninput="validate('customEmoji.gems', this.value)" onchange="popForm()">
+							</div>
+							<div class="col">
+								<label for="ceSacks">Sack of Gems Symbol: </label>
+								<input id="ceSacks" class="form-control" oninput="validate('customEmoji.sacks', this.value)" onchange="popForm()">
+							</div>
+							<div class="col">
+								<label for="ceKeys">TF2 Keys Symbol: </label>
+								<input id="ceKeys" class="form-control" oninput="validate('customEmoji.tf2', this.value)" onchange="popForm()">
+							</div>
+						</div>
+						<div id="customEmojiOptions2" class="row">
+							<div class="col">
+								<label for="ceSent">Key Sent Symbol: </label>
+								<input id="ceSent" class="form-control" oninput="validate('customEmoji.sent', this.value)" onchange="popForm()">
+							</div>
+							<div class="col">
+								<label for="cePaid">Paid Symbol: </label>
+								<input id="cePaid" class="form-control" oninput="validate('customEmoji.paid', this.value)" onchange="popForm()">
+							</div>
+							<div class="col">
+								<label for="ceDone">Done Symbol: </label>
+								<input id="ceDone" class="form-control" oninput="validate('customEmoji.done', this.value)" onchange="popForm()">
+							</div>
+						</div>
+						</br>
+						<div class="row">
+							<div class="col">
+								<label>Available Section: </label>
+								<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="miscAva" id="miscAva0" autocomplete="off" onchange="validate('misc.available', event.target.checked ? 0 : -1)">
+										<label class="btn btn-outline-secondary" for="miscAva0">Always Hide</label>
+										<input type="radio" class="btn-check" name="miscAva" id="miscAva2" autocomplete="off" onchange="validate('misc.available', event.target.checked ? 2 : -1)">
+										<label class="btn btn-outline-secondary" for="miscAva2">Hide Empty</label>
+										<input type="radio" class="btn-check" name="miscAva" id="miscAva1" autocomplete="off" onchange="validate('misc.available', event.target.checked ? 1 : -1)">
+										<label class="btn btn-outline-secondary" for="miscAva1">Always Show</label>
+								</div>
+							</div>
+							<div class="col">
+								<label>Taken Section: </label>
+								<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="miscTak" id="miscTak0" autocomplete="off" onchange="validate('misc.taken', event.target.checked ? 0 : -1)">
+										<label class="btn btn-outline-secondary" for="miscTak0">Always Hide</label>
+										<input type="radio" class="btn-check" name="miscTak" id="miscTak2" autocomplete="off" onchange="validate('misc.taken', event.target.checked ? 2 : -1)">
+										<label class="btn btn-outline-secondary" for="miscTak2">Hide Empty</label>
+										<input type="radio" class="btn-check" name="miscTak" id="miscTak1" autocomplete="off" onchange="validate('misc.taken', event.target.checked ? 1 : -1)">
+										<label class="btn btn-outline-secondary" for="miscTak1">Always Show</label>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<label>Pricing Section: </label>
+								<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="miscPri" id="miscPri0" autocomplete="off" onchange="validate('misc.pricing', event.target.checked ? 0 : -1)">
+										<label class="btn btn-outline-secondary" for="miscPri0">Hide</label>
+										<input type="radio" class="btn-check" name="miscPri" id="miscPri1" autocomplete="off" onchange="validate('misc.pricing', event.target.checked ? 1 : -1)">
+										<label class="btn btn-outline-secondary" for="miscPri1">Show</label>
+								</div>
+							</div>
+							<div class="col">
+								<label>Payment Section: </label>
+								<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="miscPay" id="miscPay0" autocomplete="off" onchange="validate('misc.payment', event.target.checked ? 0 : -1)">
+										<label class="btn btn-outline-secondary" for="miscPay0">Hide</label>
+										<input type="radio" class="btn-check" name="miscPay" id="miscPay1" autocomplete="off" onchange="validate('misc.payment', event.target.checked ? 1 : -1)">
+										<label class="btn btn-outline-secondary" for="miscPay1">Show</label>
+								</div>
+							</div>
+							<div class="col">
+								<label></label>
+								<div class="input-group btn-group" role="group">
+									<input type="checkbox" class="btn-check" id="forceEmoji" autocomplete="off" onchange="validate('misc.forceEmojiDirect', event.target.checked)">
+									<label class="btn btn-outline-secondary" for="forceEmoji">Force Emojis for DMs</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div id="export" role="tabpanel" class="tab-pane">
 				<div class="row text-center">
