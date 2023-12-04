@@ -114,16 +114,25 @@ function validate(name, value, index = -1) {
 
 function getEmoji(dm = false) {
 	let force = data.params.misc.forceEmojiDirect && dm;
-	if (data.params.emoji == 3 && !force)
+	if (force)
+		return {
+			gems: emoji.gems[1],
+			sacks: emoji.sacks[1],
+			tf2: emoji.tf2[1],
+			sent: emoji.sent[1],
+			paid: emoji.paid[1],
+			done: emoji.done[1]
+		};
+	else if (data.params.emoji == 3)
 		return data.customEmoji;
 	else
 		return {
-			gems: force ? emoji.gems[1] : emoji.gems[data.params.emoji],
-			sacks: force ? emoji.sacks[1] : emoji.sacks[data.params.emoji],
-			tf2: force ? emoji.tf2[1] : emoji.tf2[data.params.emoji],
-			sent: force ? emoji.sent[1] : emoji.sent[data.params.emoji],
-			paid: force ? emoji.paid[1] : emoji.paid[data.params.emoji],
-			done: force ? emoji.done[1] : emoji.done[data.params.emoji]
+			gems: emoji.gems[data.params.emoji],
+			sacks: emoji.sacks[data.params.emoji],
+			tf2: emoji.tf2[data.params.emoji],
+			sent: emoji.sent[data.params.emoji],
+			paid: emoji.paid[data.params.emoji],
+			done: emoji.done[data.params.emoji]
 		};
 }
 
