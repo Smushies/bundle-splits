@@ -265,7 +265,7 @@ function popForm(ignore = "", index = -1) {
 		? document.getElementById("keyOptions").classList.remove("hide")
 		: document.getElementById("keyOptions").classList.add("hide");
 	data.params.misc.forceEmojiDirect
-		? document.getElementById("forceEmoji").checked = true;
+		? document.getElementById("forceEmoji").checked = true
 		: document.getElementById("forceEmoji").checked = false;
 	
 	if (ignore != "params.comments") document.getElementById("comments").value = data.params.comments;
