@@ -506,8 +506,8 @@ function buildText() {
 		
 		let pprs = data.params.paypal || data.params.revolut ? `${formatCurr(u.price, true)}` : "";
 		let gems = Math.ceil((u.price / data.params.gemsPrice) * 1000);
-		let keys = data.params.gems && data.params.keys && gems > data.params.keysPrice ? ` or ${Math.floor(gems / data.params.keysPrice)} ${emoji.tf2[data.params.emoji < 2 ? 1 : data.params.emoji]} + ${gems % data.params.keysPrice} ${emoji.gems[data.params.emoji < 2 ? 1 : data.params.emoji]}` : "";
-		gems = data.params.gems ? data.params.paypal || data.params.revolut ? ` or ${gems} ${emoji.gems[data.params.emoji < 2 ? 1 : data.params.emoji]}` : `${gems} ${emoji.gems[data.params.emoji < 2 ? 1 : data.params.emoji]}` : "";
+		let keys = data.params.gems && data.params.keys && gems > data.params.keysPrice ? ` or ${Math.floor(gems / data.params.keysPrice)} ${getEmoji(true).tf2} + ${gems % data.params.keysPrice} ${getEmoji(true).gems}` : "";
+		gems = data.params.gems ? data.params.paypal || data.params.revolut ? ` or ${gems} ${getEmoji(true).gems}` : `${gems} ${getEmoji(true).gems}` : "";
 		
 		p += `Price: ${pprs}${gems}${keys}\n\n`;
 	});
