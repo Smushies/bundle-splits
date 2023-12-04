@@ -112,8 +112,8 @@ function validate(name, value, index = -1) {
 	popForm(name, index);
 }
 
-function getEmoji(alt = false) {
-	let force = data.params.misc.forceEmojiDirect && alt;
+function getEmoji(dm = false) {
+	let force = data.params.misc.forceEmojiDirect && dm;
 	if (data.params.emoji == 3 && !force)
 		return data.customEmoji;
 	else
