@@ -105,10 +105,10 @@ function validate(name, value, index = -1) {
 		case "customEmoji.paid": data.params.customEmoji.paid = value; break;
 		case "customEmoji.done": data.params.customEmoji.done = value; break;
 		case "params.text": data.params.text = value; break;
-		case "misc.available": data.params.misc.pricing = value; break;
-		case "misc.taken": data.params.misc.pricing = value; break;
+		case "misc.available": data.params.misc.available = value; break;
+		case "misc.taken": data.params.misc.taken = value; break;
 		case "misc.pricing": data.params.misc.pricing = value; break;
-		case "misc.payment": data.params.misc.pricing = value; break;
+		case "misc.payment": data.params.misc.payment = value; break;
 	}
 
 	reCalc(false);
@@ -489,8 +489,8 @@ function buildText() {
 	let gems = data.params.gems ? ` (${Math.ceil((data.bundle.games[0].price / data.params.gemsPrice) * 1000)} ${getEmoji().gems})\n` : "\n";
 	
 	let pricing = data.bundle.type == 1
-		? `${boldify('Pricing:')} ${formatCurr(bundlePrice, true)} / ${data.bundle.byob} = ${boldify(formatCurr(data.bundle.games[0].price, true), true)}${gems}`
-		: `${boldify('Pricing:')} ~${Math.floor(data.bundle.ratio*100)}% of gg.deals price${data.bundle.games.some(g => g.priceOverride) ? ` with ${boldify('modifications', true)}` : ""} (${formatCurr(p1, true)} / ${formatCurr(p2, true)}).`;
+		? `${boldify('Pricing:')} ${formatCurr(bundlePrice, true)} / ${data.bundle.byob} = ${boldify(formatCurr(data.bundle.games[0].price, true), true)}${gems}\n`
+		: `${boldify('Pricing:')} ~${Math.floor(data.bundle.ratio*100)}% of gg.deals price${data.bundle.games.some(g => g.priceOverride) ? ` with ${boldify('modifications', true)}` : ""} (${formatCurr(p1, true)} / ${formatCurr(p2, true)}).\n`;
 	
 	let comments = data.params.comments ? data.params.commentBottom ? `\n\n${data.params.comments}` : `${data.params.comments}\n\n` : "";
 	
