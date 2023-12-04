@@ -7,7 +7,7 @@ var data = {
 			alignRight: false
 		},
 		paypal: true,
-		paypalGS: true,
+		paypalGS: false,
 		paypalMin: 0.20,
 		gems: true,
 		gemsPrice: 0.24,
