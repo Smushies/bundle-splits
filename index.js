@@ -33,7 +33,7 @@ var data = {
 			taken: 1,
 			pricing: 1,
 			payment: 1,
-			forceEmoji: false
+			forceEmojiDirect: false
 		}
 	},
 	bundle: {
@@ -110,6 +110,21 @@ function validate(name, value, index = -1) {
 
 	reCalc(false);
 	popForm(name, index);
+}
+
+function getEmoji(alt = false) {
+	let force = data.params.misc.forceEmojiDirect && alt;
+	if (data.params.emoji == 3 && !force)
+		return data.customEmoji;
+	else
+		return {
+			gems: force ? emoji.gems[1] : emoji.gems[data.params.emoji],
+			sacks: force ? emoji.sacks[1] : emoji.sacks[data.params.emoji],
+			tf2: force ? emoji.tf2[1] : emoji.tf2[data.params.emoji],
+			sent: force ? emoji.sent[1] : emoji.sent[data.params.emoji],
+			paid: force ? emoji.paid[1] : emoji.paid[data.params.emoji],
+			done: force ? emoji.done[1] : emoji.done[data.params.emoji]
+		};
 }
 
 function changeCurr() {
@@ -300,10 +315,10 @@ function reCalc(pop = true) {
 			let sum = data.bundle.games.reduce((s, g) => g.priceOverride ? s : s + g.value, 0);
 			bundlePrice -= data.bundle.games.reduce((s, g) => g.priceOverride ? s + g.price : s, 0);
 			data.bundle.ratio = sum != 0 ? bundlePrice / sum : 0;
-			data.bundle.games.forEach(g => { if (!g.priceOverride) g.price = Math.ceil(g.value * data.bundle.ratio * 100) / 100});
+			data.bundle.games.forEach(g => { if (!g.priceOverride) g.price = Math.ceil(g.value * data.bundle.ratio * 100) / 100;});
 			break;
 		case 1:
-			if (!(data.bundle.byob > 0)) data.bundle.byob = data.bundle.games.length;
+			if (data.bundle.byob <= 0) data.bundle.byob = data.bundle.games.length;
 			data.bundle.games.forEach(g => g.price = Math.ceil((bundlePrice / data.bundle.byob) * 100) / 100);
 			break;
 	}
@@ -582,20 +597,6 @@ function byob() {
 	reCalc();
 }
 
-function getEmoji(alt = false) {
-	if (data.params.emoji == 3 && !alt)
-		return data.customEmoji;
-	else
-		return {
-			gems: alt ? emoji.gems[1] : emoji.gems[data.params.emoji],
-			sacks: alt ? emoji.sacks[1] : emoji.sacks[data.params.emoji],
-			tf2: alt ? emoji.tf2[1] : emoji.tf2[data.params.emoji],
-			sent: alt ? emoji.sent[1] : emoji.sent[data.params.emoji],
-			paid: alt ? emoji.paid[1] : emoji.paid[data.params.emoji],
-			done: alt ? emoji.done[1] : emoji.done[data.params.emoji]
-		};
-}
-
 function buildClaims() {
 	document.getElementById("claimB").disabled = gamesToClaim.length == 0;
 	document.getElementById("claimGamesDiv").innerHTML = "";
@@ -755,7 +756,7 @@ function pickBundle() {
 			xhttp.open("GET", `https://barter.vg/i/${id}/json/`, true);
 			xhttp.send();
 		});
-	}
+	};
 	
 	let promises = [];
 	pick.games.forEach(game => {
@@ -848,7 +849,6 @@ function migrate(storedData) {
 		case undefined:
 		case null:
 		case 0: {
-			updatedData.version = 0;
 			switch(updatedData.params.currency) {
 				case "EUR": updatedData.params.currency = "1"; break;
 				case "GBP": updatedData.params.currency = "2"; break;
@@ -858,6 +858,7 @@ function migrate(storedData) {
 			updatedData.params.misc = {
 				pricing: updatedData.params.hidePricing ? 0 : 1
 			};
+			updatedData.version = 0;
 		}
 		case 1: {
 			updatedData.version = 1;
@@ -908,7 +909,7 @@ if (shared) {
 		};
 		reCalc();
 		window.history.replaceState(null, "", "/split");
-	}).catch(err => {throw err});
+	}).catch(err => {throw err;});
 }
 
 reCalc();
