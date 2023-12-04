@@ -593,7 +593,6 @@ function doClaim() {
 	if (!n) return;
 	
 	gamesToClaim.forEach(i => {
-
 		data.bundle.games[i].claims.push(n);
 	});
 	
