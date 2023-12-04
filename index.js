@@ -867,6 +867,7 @@ function migrate(storedData) {
 			updatedData.params.misc = {
 				pricing: updatedData.params.hidePricing ? 0 : 1
 			};
+			delete updatedData.params.hidePricing;
 			updatedData.version = 0;
 		}
 		case 1: {
