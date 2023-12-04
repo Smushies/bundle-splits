@@ -77,7 +77,6 @@ function validate(name, value, index = -1) {
 		case "bundle.price": data.bundle.price = parseFloat(value) || 0; link.valid = false; break;
 		case "bundle.discount": data.bundle.discount = parseFloat(value / 100) || 0; link.valid = false; break;
 		case "bundle.count": data.bundle.count = parseInt(value) || 0; break;
-		case "params.hidePricing": data.params.hidePricing = value; break;
 		case "params.paypal": data.params.paypal = value; break;
 		case "params.paypalGS": data.params.paypalGS = value; break;
 		case "params.paypalMin": data.params.paypalMin = parseFloat(value) || 0; break;
@@ -89,9 +88,9 @@ function validate(name, value, index = -1) {
 		case "params.gemsPrice": data.params.gemsPrice = parseFloat(value) || 0; break;
 		case "params.keysPrice": data.params.keysPrice = parseFloat(value) || 0; break;
 		case "params.currency": data.params.currency = value; link.valid = false; break;
-		case "params.currencyOther.code": data.params.currencyOther.code = value; break;
-		case "params.currencyOther.symbol": data.params.currencyOther.symbol = value; break;
-		case "params.currencyOther.alignRight": data.params.currencyOther.alignRight = value; break;
+		case "currencyOther.code": data.params.currencyOther.code = value; break;
+		case "currencyOther.symbol": data.params.currencyOther.symbol = value; break;
+		case "currencyOther.alignRight": data.params.currencyOther.alignRight = value; break;
 		case "params.comments": data.params.comments = value; break;
 		case "params.commentBottom": data.params.commentBottom = value; break;
 		case "games.name": data.bundle.games[index - 1].name = value; link.valid = false; break;
@@ -99,13 +98,17 @@ function validate(name, value, index = -1) {
 		case "games.price": data.bundle.games[index - 1].price = parseFloat(value) || 0; link.valid = false; break;
 		case "bundle.byob": data.bundle.byob = parseInt(value) || 0; link.valid = false; break;
 		case "params.emoji": data.params.emoji = value; break;
-		case "params.customEmoji.gems": data.params.customEmoji.gems = value; break;
-		case "params.customEmoji.sacks": data.params.customEmoji.sacks = value; break;
-		case "params.customEmoji.tf2": data.params.customEmoji.tf2 = value; break;
-		case "params.customEmoji.sent": data.params.customEmoji.sent = value; break;
-		case "params.customEmoji.paid": data.params.customEmoji.paid = value; break;
-		case "params.customEmoji.done": data.params.customEmoji.done = value; break;
+		case "customEmoji.gems": data.params.customEmoji.gems = value; break;
+		case "customEmoji.sacks": data.params.customEmoji.sacks = value; break;
+		case "customEmoji.tf2": data.params.customEmoji.tf2 = value; break;
+		case "customEmoji.sent": data.params.customEmoji.sent = value; break;
+		case "customEmoji.paid": data.params.customEmoji.paid = value; break;
+		case "customEmoji.done": data.params.customEmoji.done = value; break;
 		case "params.text": data.params.text = value; break;
+		case "misc.available": data.params.misc.pricing = value; break;
+		case "misc.taken": data.params.misc.pricing = value; break;
+		case "misc.pricing": data.params.misc.pricing = value; break;
+		case "misc.payment": data.params.misc.pricing = value; break;
 	}
 
 	reCalc(false);
@@ -162,14 +165,13 @@ function popForm(ignore = "", index = -1) {
 		document.getElementById("emojiD").disabled = false;
 	if (ignore != "bundle.price") document.getElementById("bPrice").value = formatCurr(data.bundle.price);
 	if (ignore != "bundle.discount") document.getElementById("discount").value = data.bundle.discount * 100;
-	document.getElementById("hidePricing").checked = data.params.hidePricing;
 	document.getElementById("paypal").checked = data.params.paypal;
 	document.getElementById("revolut").checked = data.params.revolut;
 	document.getElementById("gems").checked = data.params.gems;
 	document.getElementById("keys").checked = data.params.keys;
 	document.getElementById("customPay").checked = data.params.customPay;
-	if (ignore != "params.currencyOther.code") document.getElementById("oCurrCode").value = data.params.currencyOther.code;
-	if (ignore != "params.currencyOther.symbol") document.getElementById("oCurrSymbol").value = data.params.currencyOther.symbol;
+	if (ignore != "currencyOther.code") document.getElementById("oCurrCode").value = data.params.currencyOther.code;
+	if (ignore != "currencyOther.symbol") document.getElementById("oCurrSymbol").value = data.params.currencyOther.symbol;
 	data.params.currencyOther.alignRight
 		? document.getElementById("cRight1").checked = true
 		: document.getElementById("cRight0").checked = true;
@@ -195,6 +197,28 @@ function popForm(ignore = "", index = -1) {
 		case 0: document.getElementById("textD").checked = true; break;
 		case 1: document.getElementById("textS").checked = true; break;
 	}
+	switch(data.params.misc.available) {
+		case -1:
+		case 0: document.getElementById("miscAva0").checked = true; break;
+		case 1: document.getElementById("miscAva1").checked = true; break;
+		case 2: document.getElementById("miscAva2").checked = true; break;
+	}
+	switch(data.params.misc.taken) {
+		case -1:
+		case 0: document.getElementById("miscAva0").checked = true; break;
+		case 1: document.getElementById("miscTak1").checked = true; break;
+		case 2: document.getElementById("miscTak2").checked = true; break;
+	}
+	switch(data.params.misc.pricing) {
+		case -1:
+		case 0: document.getElementById("miscPri0").checked = true; break;
+		case 1: document.getElementById("miscPri1").checked = true; break;
+	}
+	switch(data.params.misc.payment) {
+		case -1:
+		case 0: document.getElementById("miscPay0").checked = true; break;
+		case 1: document.getElementById("miscPay1").checked = true; break;
+	}
 	
 	if (data.params.emoji == 3) {
 		data.params.gems
@@ -208,12 +232,12 @@ function popForm(ignore = "", index = -1) {
 		document.getElementById("customEmojiOptions1").classList.add("hide");
 		document.getElementById("customEmojiOptions2").classList.add("hide");
 	}
-	if (ignore != "params.customEmoji.gems") document.getElementById("ceGems").value = data.params.customEmoji.gems;
-	if (ignore != "params.customEmoji.sacks") document.getElementById("ceSacks").value = data.params.customEmoji.sacks;
-	if (ignore != "params.customEmoji.tf2") document.getElementById("ceKeys").value = data.params.customEmoji.tf2;
-	if (ignore != "params.customEmoji.sent") document.getElementById("ceSent").value = data.params.customEmoji.sent;
-	if (ignore != "params.customEmoji.paid") document.getElementById("cePaid").value = data.params.customEmoji.paid;
-	if (ignore != "params.customEmoji.done") document.getElementById("ceDone").value = data.params.customEmoji.done;
+	if (ignore != "customEmoji.gems") document.getElementById("ceGems").value = data.params.customEmoji.gems;
+	if (ignore != "customEmoji.sacks") document.getElementById("ceSacks").value = data.params.customEmoji.sacks;
+	if (ignore != "customEmoji.tf2") document.getElementById("ceKeys").value = data.params.customEmoji.tf2;
+	if (ignore != "customEmoji.sent") document.getElementById("ceSent").value = data.params.customEmoji.sent;
+	if (ignore != "customEmoji.paid") document.getElementById("cePaid").value = data.params.customEmoji.paid;
+	if (ignore != "customEmoji.done") document.getElementById("ceDone").value = data.params.customEmoji.done;
 
 	data.params.currency == 3
 		? document.getElementById("otherCurr").classList.remove("hide")
@@ -402,7 +426,7 @@ function buildText() {
 	
 	let area = document.getElementById("copy");
 	let a = data.bundle.type == 1 ? `${boldify('Available:')} (${data.bundle.byob * data.bundle.count - taken}/${data.bundle.byob * data.bundle.count})\n` : `${boldify('Available:')}\n`;
-	let t = data.bundle.type == 1 ? `\n${boldify('Taken:')} (${taken}/${data.bundle.byob * data.bundle.count})\n` : `\n${boldify('Taken:')}\n`;
+	let t = data.bundle.type == 1 ? `${boldify('Taken:')} (${taken}/${data.bundle.byob * data.bundle.count})\n` : `${boldify('Taken:')}\n`;
 	let curr = getCurr(data.params.currency);
 	let bundlePrice = data.bundle.discount != 1 ? Math.ceil(data.bundle.price * (1 - data.bundle.discount) * 100) / 100 : 0;
 	let min = data.bundle.games.some(g => g.price < data.params.paypalMin)
@@ -412,17 +436,17 @@ function buildText() {
 		? `(I'll cover fees${min})`
 		: "";
 	
-	let footer = `\n${boldify('Payment:')}\n`;
+	let payment = `${boldify('Payment:')}\n`;
 	if (data.params.paypal)
-		footer += `PayPal ${getCurr(data.params.currency).code} ${data.params.paypalGS ? "G&S" : "F&F"} ${fees}\n`;
+		payment += `PayPal ${getCurr(data.params.currency).code} ${data.params.paypalGS ? "G&S" : "F&F"} ${fees}\n`;
 	if (data.params.revolut)
-		footer += `Revolut ${getCurr(data.params.currency).code}\n`;
+		payment += `Revolut ${getCurr(data.params.currency).code}\n`;
 	if (data.params.customPay)
-		footer += data.params.customPayment + "\n";
+		payment += data.params.customPayment + "\n";
 	if (data.params.gems) {
-		footer += `Gems (${formatCurr(data.params.gemsPrice, true)} / ${getEmoji().sacks})\n`;
+		payment += `Gems (${formatCurr(data.params.gemsPrice, true)} / ${getEmoji().sacks})\n`;
 		if (data.params.keys)
-			footer += `TF2 Keys (${getEmoji().tf2} 1:${data.params.keysPrice} ${getEmoji().gems})\n`;
+			payment += `TF2 Keys (${getEmoji().tf2} 1:${data.params.keysPrice} ${getEmoji().gems})\n`;
 	}
 
 	if (data.bundle.type == 1) {
@@ -465,14 +489,37 @@ function buildText() {
 	let gems = data.params.gems ? ` (${Math.ceil((data.bundle.games[0].price / data.params.gemsPrice) * 1000)} ${getEmoji().gems})\n` : "\n";
 	
 	let pricing = data.bundle.type == 1
-		? `\n${boldify('Pricing:')} ${formatCurr(bundlePrice, true)} / ${data.bundle.byob} = ${boldify(formatCurr(data.bundle.games[0].price, true), true)}${gems}`
-		: `\n${boldify('Pricing:')} ~${Math.floor(data.bundle.ratio*100)}% of gg.deals price${data.bundle.games.some(g => g.priceOverride) ? ` with ${boldify('modifications', true)}` : ""} (${formatCurr(p1, true)} / ${formatCurr(p2, true)}).\n`;
+		? `${boldify('Pricing:')} ${formatCurr(bundlePrice, true)} / ${data.bundle.byob} = ${boldify(formatCurr(data.bundle.games[0].price, true), true)}${gems}`
+		: `${boldify('Pricing:')} ~${Math.floor(data.bundle.ratio*100)}% of gg.deals price${data.bundle.games.some(g => g.priceOverride) ? ` with ${boldify('modifications', true)}` : ""} (${formatCurr(p1, true)} / ${formatCurr(p2, true)}).`;
 	
-	let comments = data.params.comments ? data.params.commentBottom ? `\n${data.params.comments}` : `${data.params.comments}\n\n` : "";
+	let comments = data.params.comments ? data.params.commentBottom ? `\n\n${data.params.comments}` : `${data.params.comments}\n\n` : "";
 	
+	switch(data.params.misc.available) {
+		case 0: a = ""; break;
+		case 2: {
+			if (data.bundle.type == 1 && data.bundle.byob * data.bundle.count - taken == 0) { a = ""; break; }
+			if (data.bundle.games.reduce((t, g) => t + (data.bundle.count - g.claims.length), 0) <= 0) {a = ""; break; }
+		}
+	}
+	switch(data.params.misc.taken) {
+		case 0: t = ""; break;
+		case 2: {
+			if (data.bundle.games.reduce((t, g) => t + g.claims.length, 0) <= 0) {t = ""; break; }
+		}
+		case 1: if (a != "") t = `\n${t}`; break;
+	}
+	switch(data.params.misc.pricing) {
+		case 0: pricing = ""; break;
+		case 1: if(a != "" || t != "") pricing = `\n${pricing}`; break;
+	}
+	switch(data.params.misc.payment) {
+		case 0: payment = ""; break;
+		case 1: if(a != "" || t != "" || pricing != "") payment = `\n${payment}`; break;
+	}
+
 	area.value = data.params.commentBottom
-		? `${a}${t}${data.params.hidePricing ? "" : pricing}${footer}${comments}`
-		: `${comments}${a}${t}${data.params.hidePricing ? "" : pricing}${footer}`;
+		? `${a}${t}${pricing}${payment}${comments}`
+		: `${comments}${a}${t}${pricing}${payment}`;
 	countChars();
 	
 	let area2 = document.getElementById("priv");

@@ -74,7 +74,6 @@
 							</div>
 						</div>
 						</br>
-						
 						<div class="row">
 							<label for="comments">Comments: </label>
 							<div class="input-group">
@@ -168,18 +167,18 @@
 								<div class="row">
 									<div class="col">
 										<label for="oCurrCode">Currency Code: </label>
-										<input id="oCurrCode" class="form-control" oninput="validate('params.currencyOther.code', this.value)" onchange="popForm()">
+										<input id="oCurrCode" class="form-control" oninput="validate('currencyOther.code', this.value)" onchange="popForm()">
 									</div>
 									<div class="col">
 										<label for="oCurrSymbol">Currency Symbol: </label>
-									<input id="oCurrSymbol" class="form-control" oninput="validate('params.currencyOther.symbol', this.value)" onchange="popForm()">
+									<input id="oCurrSymbol" class="form-control" oninput="validate('currencyOther.symbol', this.value)" onchange="popForm()">
 									</div>
 									<div class="col">
 										<label for="oCurrAlign">Symbol Alignment: </label>
 										<div id="oCurrAlign" class="input-group btn-group" role="group">
-										<input type="radio" class="btn-check" name="cRight" id="cRight0" autocomplete="off" onchange="validate('params.currencyOther.alignRight', event.target.checked ? false : true)">
+										<input type="radio" class="btn-check" name="cRight" id="cRight0" autocomplete="off" onchange="validate('currencyOther.alignRight', event.target.checked ? false : true)">
 										<label class="btn btn-outline-secondary" for="cRight0">Left</label>
-										<input type="radio" class="btn-check" name="cRight" id="cRight1" autocomplete="off" onchange="validate('params.currencyOther.alignRight', event.target.checked ? true : false)">
+										<input type="radio" class="btn-check" name="cRight" id="cRight1" autocomplete="off" onchange="validate('currencyOther.alignRight', event.target.checked ? true : false)">
 										<label class="btn btn-outline-secondary" for="cRight1">Right</label>
 										</div>
 									</div>
@@ -242,6 +241,7 @@
 								<textarea id="customPayText" rows="2" class="form-control" oninput="validate('params.customPayment', this.value)" onchange="popForm()"></textarea>
 							</div>
 						</div>
+						</br>
 						<div class="row">
 							<div id="emojiOptions" class="col">
 									<label for="eOption">Emojis?</label>
@@ -269,37 +269,73 @@
 						<div id="customEmojiOptions1" class="row">
 							<div class="col">
 								<label for="ceGems">Gems Symbol: </label>
-								<input id="ceGems" class="form-control" oninput="validate('params.customEmoji.gems', this.value)" onchange="popForm()">
+								<input id="ceGems" class="form-control" oninput="validate('customEmoji.gems', this.value)" onchange="popForm()">
 							</div>
 							<div class="col">
 								<label for="ceSacks">Sack of Gems Symbol: </label>
-								<input id="ceSacks" class="form-control" oninput="validate('params.customEmoji.sacks', this.value)" onchange="popForm()">
+								<input id="ceSacks" class="form-control" oninput="validate('customEmoji.sacks', this.value)" onchange="popForm()">
 							</div>
 							<div class="col">
 								<label for="ceKeys">TF2 Keys Symbol: </label>
-								<input id="ceKeys" class="form-control" oninput="validate('params.customEmoji.tf2', this.value)" onchange="popForm()">
+								<input id="ceKeys" class="form-control" oninput="validate('customEmoji.tf2', this.value)" onchange="popForm()">
 							</div>
 						</div>
 						<div id="customEmojiOptions2" class="row">
 							<div class="col">
 								<label for="ceSent">Key Sent Symbol: </label>
-								<input id="ceSent" class="form-control" oninput="validate('params.customEmoji.sent', this.value)" onchange="popForm()">
+								<input id="ceSent" class="form-control" oninput="validate('customEmoji.sent', this.value)" onchange="popForm()">
 							</div>
 							<div class="col">
 								<label for="cePaid">Paid Symbol: </label>
-								<input id="cePaid" class="form-control" oninput="validate('params.customEmoji.paid', this.value)" onchange="popForm()">
+								<input id="cePaid" class="form-control" oninput="validate('customEmoji.paid', this.value)" onchange="popForm()">
 							</div>
 							<div class="col">
 								<label for="ceDone">Done Symbol: </label>
-								<input id="ceDone" class="form-control" oninput="validate('params.customEmoji.done', this.value)" onchange="popForm()">
+								<input id="ceDone" class="form-control" oninput="validate('customEmoji.done', this.value)" onchange="popForm()">
+							</div>
+						</div>
+						</br>
+						<div class="row">
+							<div class="col">
+								<label>Available Section: </label>
+								<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="miscAva" id="miscAva0" autocomplete="off" onchange="validate('misc.available', event.target.checked ? 0 : -1)">
+										<label class="btn btn-outline-secondary" for="miscAva0">Always Hide</label>
+										<input type="radio" class="btn-check" name="miscAva" id="miscAva2" autocomplete="off" onchange="validate('misc.available', event.target.checked ? 2 : -1)">
+										<label class="btn btn-outline-secondary" for="miscAva2">Hide Empty</label>
+										<input type="radio" class="btn-check" name="miscAva" id="miscAva1" autocomplete="off" onchange="validate('misc.available', event.target.checked ? 1 : -1)">
+										<label class="btn btn-outline-secondary" for="miscAva1">Always Show</label>
+								</div>
+							</div>
+							<div class="col">
+								<label>Taken Section: </label>
+								<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="miscTak" id="miscTak0" autocomplete="off" onchange="validate('misc.taken', event.target.checked ? 0 : -1)">
+										<label class="btn btn-outline-secondary" for="miscTak0">Always Hide</label>
+										<input type="radio" class="btn-check" name="miscTak" id="miscTak2" autocomplete="off" onchange="validate('misc.taken', event.target.checked ? 2 : -1)">
+										<label class="btn btn-outline-secondary" for="miscTak2">Hide Empty</label>
+										<input type="radio" class="btn-check" name="miscTak" id="miscTak1" autocomplete="off" onchange="validate('misc.taken', event.target.checked ? 1 : -1)">
+										<label class="btn btn-outline-secondary" for="miscTak1">Always Show</label>
+								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								<label>Miscellaneous: </label>
-								<div class="input-group btn-group">
-									<input type="checkbox" class="btn-check" id="hidePricing" autocomplete="off" onchange="validate('params.hidePricing', event.target.checked)">
-									<label class="btn btn-outline-secondary" for="hidePricing">Hide Pricing?</label>
+								<label>Pricing Section: </label>
+								<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="miscPri" id="miscPri0" autocomplete="off" onchange="validate('misc.pricing', event.target.checked ? 0 : -1)">
+										<label class="btn btn-outline-secondary" for="miscPri0">Always Hide</label>
+										<input type="radio" class="btn-check" name="miscPri" id="miscPri1" autocomplete="off" onchange="validate('misc.pricing', event.target.checked ? 1 : -1)">
+										<label class="btn btn-outline-secondary" for="miscPri1">Always Show</label>
+								</div>
+							</div>
+							<div class="col">
+								<label>Payment Section: </label>
+								<div class="input-group btn-group" role="group">
+										<input type="radio" class="btn-check" name="miscPay" id="miscPay0" autocomplete="off" onchange="validate('misc.payment', event.target.checked ? 0 : -1)">
+										<label class="btn btn-outline-secondary" for="miscPay0">Always Hide</label>
+										<input type="radio" class="btn-check" name="miscPay" id="miscPay1" autocomplete="off" onchange="validate('misc.payment', event.target.checked ? 1 : -1)">
+										<label class="btn btn-outline-secondary" for="miscPay1">Always Show</label>
 								</div>
 							</div>
 						</div>
