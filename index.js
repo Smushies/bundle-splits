@@ -205,7 +205,7 @@ function popForm(ignore = "", index = -1) {
 	}
 	switch(data.params.misc.taken) {
 		case -1:
-		case 0: document.getElementById("miscAva0").checked = true; break;
+		case 0: document.getElementById("miscTak0").checked = true; break;
 		case 1: document.getElementById("miscTak1").checked = true; break;
 		case 2: document.getElementById("miscTak2").checked = true; break;
 	}
