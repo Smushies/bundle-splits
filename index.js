@@ -489,8 +489,8 @@ function buildText() {
 	let gems = data.params.gems ? ` (${Math.ceil((data.bundle.games[0].price / data.params.gemsPrice) * 1000)} ${getEmoji().gems})\n` : "\n";
 	
 	let pricing = data.bundle.type == 1
-		? `${boldify('Pricing:')} ${formatCurr(bundlePrice, true)} / ${data.bundle.byob} = ${boldify(formatCurr(data.bundle.games[0].price, true), true)}${gems}\n`
-		: `${boldify('Pricing:')} ~${Math.floor(data.bundle.ratio*100)}% of gg.deals price${data.bundle.games.some(g => g.priceOverride) ? ` with ${boldify('modifications', true)}` : ""} (${formatCurr(p1, true)} / ${formatCurr(p2, true)}).\n`;
+		? `${boldify('Pricing:')} ${formatCurr(bundlePrice, true)} / ${data.bundle.byob} = ${boldify(formatCurr(data.bundle.games[0].price, true), true)}${gems}`
+		: `${boldify('Pricing:')} ~${Math.floor(data.bundle.ratio*100)}% of gg.deals price${data.bundle.games.some(g => g.priceOverride) ? ` with ${boldify('modifications', true)}` : ""} (${formatCurr(p1, true)} / ${formatCurr(p2, true)}).`;
 	
 	let comments = data.params.comments ? data.params.commentBottom ? `\n\n${data.params.comments}` : `${data.params.comments}\n\n` : "";
 	
