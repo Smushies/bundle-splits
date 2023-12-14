@@ -824,8 +824,6 @@ function pickBundle() {
 			priceOverride: false,
 			claims: []
 		}));
-		for (let i = 0; i < games.length; i++)
-			data.bundle.games[i].name = JSON.parse(values[i]).title;
 		reCalc();
 		document.getElementById("pickBundleButton").disabled = false;
 	});
@@ -853,9 +851,7 @@ function generateShareLink() {
 			link.url = `https://${document.location.host}/split?share=${request.response}`;
 			link.valid = true;
 			localStorage.setItem('link', JSON.stringify(link));
-			document.getElementById("linkValid").classList.remove("border-warning");
-			document.getElementById("genLink").disabled = link.valid;
-			document.getElementById("shareLink").value = link.url;
+			popForm();
 		}
 	};
 	request.send(JSON.stringify(contents));
