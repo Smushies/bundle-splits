@@ -319,16 +319,15 @@ function list() {
 	let games = document.getElementById("list").value.split("\n");
 	if (!games || games.length == 0) return;
 	
-	while (data.bundle.games.length < games.length) data.bundle.games.push({
-		name: "",
-		value: 0,
-		price: 0,
-		priceOverride: false,
-		claims: []
-	});
-	
-	for (let i = 0; i < games.length; i++)
-		data.bundle.games[i].name = games[i];
+	data.bundle.games = [];
+	link.valid = false;
+	games.forEach(g => data.bundle.games.push({
+			name: g,
+			value: 0,
+			price: 0,
+			priceOverride: false,
+			claims: []
+	}));
 	
 	reCalc();
 }
@@ -796,15 +795,6 @@ function pickBundle() {
 	document.getElementById("pickBundleButton").disabled = true;
 	let pick = barterBundles.find(bundle => bundle.id == document.getElementById("bundleSelect").value);
 	
-	while (data.bundle.games.length < pick.games.length) data.bundle.games.push({
-		name: "",
-		value: 0,
-		price: 0,
-		priceOverride: false,
-		claims: []
-	});
-	while (data.bundle.games.length > pick.games.length) data.bundle.games.pop();
-	
 	const getGame = (id) => {
 		return new Promise((resolve, reject) => {
 			var xhttp = new XMLHttpRequest();
@@ -823,7 +813,18 @@ function pickBundle() {
 	});
 	
 	Promise.all(promises).then((values) => {
-		for (let i = 0; i < values.length; i++)
+		let games = values.map(v => JSON.parse(v)).toSorted((a, b) => a.title.localeCompare(b.title, undefined, {sensitivity: 'base'}));
+		
+		data.bundle.games = [];
+		link.valid = false;
+		games.forEach(g => data.bundle.games.push({
+			name: g.title,
+			value: 0,
+			price: 0,
+			priceOverride: false,
+			claims: []
+		}));
+		for (let i = 0; i < games.length; i++)
 			data.bundle.games[i].name = JSON.parse(values[i]).title;
 		reCalc();
 		document.getElementById("pickBundleButton").disabled = false;
