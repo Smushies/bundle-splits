@@ -1,6 +1,6 @@
 var data = {
 	params: {
-		currency: 0,
+		currency: "0",
 		currencyOther: {
 			code: "CNY",
 			symbol: "¥",
@@ -53,7 +53,7 @@ var data = {
 		}]
 	},
 	claimers: [],
-	version: 2
+	version: 3
 };
 
 const emoji = {
@@ -240,7 +240,7 @@ function popForm(ignore = "", index = -1) {
 	if (ignore != "customEmoji.paid") document.getElementById("cePaid").value = data.params.customEmoji.paid;
 	if (ignore != "customEmoji.done") document.getElementById("ceDone").value = data.params.customEmoji.done;
 
-	data.params.currency == 3
+	data.params.currency == "3"
 		? document.getElementById("otherCurr").classList.remove("hide")
 		: document.getElementById("otherCurr").classList.add("hide");
 	data.params.paypal
@@ -917,8 +917,12 @@ function migrate(storedData) {
 			delete updatedData.params.hidePricing;
 			updatedData.version = 0;
 		}
-		case 1: {
-			updatedData.version = 1;
+		case 1: updatedData.version = 1;
+		case 2: updatedData.version = 2;
+		case 3: {//Bug fix with default data
+			if (updatedData.params.currency == 0)
+				updatedData.params.currency = "0";
+			updatedData.version = 3;
 		}
 	}
 	return updatedData;
