@@ -859,7 +859,7 @@ function generateShareLink() {
 
 function consumeShareLink(sharedData) {
 	sharedData = migrate(sharedData);
-	if (typeof sharedData?.params?.currency !== "string" || typeof sharedData.bundle.byob !== "number" || typeof sharedData.bundle.discount !== "number" || typeof sharedData.bundle.price !== "number" || typeof sharedData.bundle.type !== "number")
+	if (typeof sharedData?.params?.currency !== "number" || typeof sharedData.bundle.byob !== "number" || typeof sharedData.bundle.discount !== "number" || typeof sharedData.bundle.price !== "number" || typeof sharedData.bundle.type !== "number")
 		throw new Error("Failed to check share link! (1)");
 			
 	sharedData.bundle.games.forEach(g => {
