@@ -929,29 +929,31 @@ function migrate(storedData) {
 }
 
 let storedData = JSON.parse(localStorage.getItem('data'));
-storedData = migrate(storedData);
-if (storedData) data = {
-	...data,
-	params: {
-		...data.params, 
-		...storedData.params,
-		currencyOther: {
-			...data.params.currencyOther,
-			...storedData.params.currencyOther
+if (storedData) {
+	storedData = migrate(storedData);
+	data = {
+		...data,
+		params: {
+			...data.params, 
+			...storedData.params,
+			currencyOther: {
+				...data.params.currencyOther,
+				...storedData.params.currencyOther
+			},
+			customEmoji: {
+				...data.params.customEmoji,
+				...storedData.params.customEmoji
+			},
+			misc: {
+				...data.params.misc,
+				...storedData.params.misc
+			}
 		},
-		customEmoji: {
-			...data.params.customEmoji,
-			...storedData.params.customEmoji
-		},
-		misc: {
-			...data.params.misc,
-			...storedData.params.misc
-		}
-	},
-	bundle: {...data.bundle, ...storedData.bundle},
-	claimers: storedData.claimers,
-	version: storedData.version
-};
+		bundle: {...data.bundle, ...storedData.bundle},
+		claimers: storedData.claimers,
+		version: storedData.version
+	};
+}
 let slink = JSON.parse(localStorage.getItem('link'));
 if (slink) link = {
 	url: slink?.url ?? link.url,
