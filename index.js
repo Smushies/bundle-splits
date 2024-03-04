@@ -931,6 +931,7 @@ function migrate(storedData) {
 		}
 		case 4: {//new Fanatical BYOB+ change
 			updatedData.bundle.byobPlus = true;
+			updatedData.version = 4;
 		}
 	}
 	return updatedData;
