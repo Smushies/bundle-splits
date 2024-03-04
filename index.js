@@ -44,6 +44,7 @@ var data = {
 		ratio: 0,
 		count: 1,
 		byob: 3,
+		byobPlus: true,
 		games: [{
 			name: "",
 			value: 0,
@@ -53,7 +54,7 @@ var data = {
 		}]
 	},
 	claimers: [],
-	version: 3
+	version: 4
 };
 
 const emoji = {
@@ -97,6 +98,7 @@ function validate(name, value, index = -1) {
 		case "games.value": data.bundle.games[index - 1].value = parseFloat(value) || 0; link.valid = false; break;
 		case "games.price": data.bundle.games[index - 1].price = parseFloat(value) || 0; link.valid = false; break;
 		case "bundle.byob": data.bundle.byob = parseInt(value) || 0; link.valid = false; break;
+		case "bundle.byobPlus": data.bundle.byobPlus = value; break;
 		case "params.emoji": data.params.emoji = value; break;
 		case "customEmoji.gems": data.params.customEmoji.gems = value; break;
 		case "customEmoji.sacks": data.params.customEmoji.sacks = value; break;
@@ -182,8 +184,10 @@ function popForm(ignore = "", index = -1) {
 	if (ignore != "params.keyPrice") document.getElementById("keyPrice").value = data.params.keysPrice;
 	if (ignore != "params.customPayment") document.getElementById("customPayText").value = data.params.customPayment;
 	document.getElementById("byob").checked = data.bundle.type == 1;
+	document.getElementById("byobPlus").checked = data.bundle.byobPlus;
 	if (ignore != "bundle.byob") document.getElementById("byobC").value = data.bundle.type != 1 ? null : data.bundle.byob;
 	document.getElementById("byobC").disabled = data.bundle.type != 1;
+	document.getElementById("byobPlus").disabled = data.bundle.type != 1;
 	if (ignore != "bundle.count") document.getElementById("bundleCount").value = data.bundle.count;
 	
 	switch(data.params.emoji) {
@@ -426,10 +430,11 @@ function boldify(text) {
 
 function buildText() {
 	let taken = data.bundle.games.reduce((t,g) => t + g.claims.length, 0);
+	let plusIcon = data.bundle.byobPlus ? "+" : "";
 	
 	let area = document.getElementById("copy");
-	let a = data.bundle.type == 1 ? `${boldify('Available:')} (${data.bundle.byob * data.bundle.count - taken}/${data.bundle.byob * data.bundle.count})\n` : `${boldify('Available:')}\n`;
-	let t = data.bundle.type == 1 ? `${boldify('Taken:')} (${taken}/${data.bundle.byob * data.bundle.count})\n` : `${boldify('Taken:')}\n`;
+	let a = data.bundle.type == 1 && !data.bundle.byobPlus ? `${boldify('Available:')} (${data.bundle.byob * data.bundle.count - taken}/${data.bundle.byob * data.bundle.count})\n` : `${boldify('Available:')}\n`;
+	let t = data.bundle.type == 1 ? `${boldify('Taken:')} (${taken}/${data.bundle.byob * data.bundle.count}${plusIcon})\n` : `${boldify('Taken:')}\n`;
 	let curr = getCurr(data.params.currency);
 	let bundlePrice = data.bundle.discount != 1 ? Math.ceil(data.bundle.price * (1 - data.bundle.discount) * 100) / 100 : 0;
 	let min = data.bundle.games.some(g => g.price < data.params.paypalMin)
@@ -500,7 +505,7 @@ function buildText() {
 	switch(data.params.misc.available) {
 		case 0: a = ""; break;
 		case 2: {
-			if (data.bundle.type == 1 && data.bundle.byob * data.bundle.count - taken == 0) { a = ""; break; }
+			if (data.bundle.type == 1 && !data.bundle.byobPlus && data.bundle.byob * data.bundle.count - taken == 0) { a = ""; break; }
 			if (data.bundle.games.reduce((t, g) => t + (data.bundle.count - g.claims.length), 0) <= 0) {a = ""; break; }
 		}
 	}
@@ -923,6 +928,9 @@ function migrate(storedData) {
 			if (updatedData.params.currency == 0)
 				updatedData.params.currency = "0";
 			updatedData.version = 3;
+		}
+		case 4: {//new Fanatical BYOB+ change
+			updatedData.bundle.byobPlus = true;
 		}
 	}
 	return updatedData;

@@ -70,6 +70,8 @@
 								<div class="input-group">
 									<div class="input-group-text"><input id="byob" class="form-check-input mt-0" type="checkbox" onchange="byob()"></div>
 									<input id="byobC" type="number" step="1" class="form-control" oninput="validate('bundle.byob', this.value)" onchange="popForm()" disabled>
+									<input id="byobPlus" type="checkbox" class="btn-check " autocomplete="off" onchange="validate('bundle.byobPlus', event.target.checked)">
+									<label class="btn btn-outline-secondary" for="byobPlus"><i class="bi bi-person-plus-fill"></i></label>
 								</div>
 							</div>
 						</div>
