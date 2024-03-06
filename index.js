@@ -501,12 +501,12 @@ function buildText() {
 		: `${boldify('Pricing:')} ~${Math.floor(data.bundle.ratio*100)}% of gg.deals price${data.bundle.games.some(g => g.priceOverride) ? " with " + boldify('modifications', true) : ""} (${formatCurr(p1, true)} / ${formatCurr(p2, true)}).\n`;
 	
 	let comments = data.params.comments ? data.params.commentBottom ? `\n\n${data.params.comments}` : `${data.params.comments}\n\n` : "";
-	let gamesSent = data.claimers.some(c => c.sent);
+	let gamesSent = data.claimers.some(c => c.sent).count;
 	
 	switch(data.params.misc.available) {
 		case 0: a = ""; break;
 		case 2: {
-			if (data.bundle.type == 1 && !data.bundle.byobPlus && !gamesSent && data.bundle.byob * data.bundle.count - taken <= 0) { a = ""; break; }
+			if (data.bundle.type == 1 && !data.bundle.byobPlus && gamesSent > 0 && data.bundle.byob * data.bundle.count - taken <= 0) { a = ""; break; }
 			if (data.bundle.games.reduce((t, g) => t + (data.bundle.count - g.claims.length), 0) <= 0) {a = ""; break; }
 		}
 	}
