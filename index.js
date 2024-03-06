@@ -506,7 +506,7 @@ function buildText() {
 	switch(data.params.misc.available) {
 		case 0: a = ""; break;
 		case 2: {
-			if (data.bundle.type == 1 && !data.bundle.byobPlus && gamesSent > 0 && data.bundle.byob * data.bundle.count - taken <= 0) { a = ""; break; }
+			if (data.bundle.type == 1 && (!data.bundle.byobPlus || gamesSent > 0) && data.bundle.byob * data.bundle.count - taken <= 0) { a = ""; break; }
 			if (data.bundle.games.reduce((t, g) => t + (data.bundle.count - g.claims.length), 0) <= 0) {a = ""; break; }
 		}
 	}
