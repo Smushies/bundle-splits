@@ -754,7 +754,7 @@ function allowPick() {
 function fetchBundles() {
 	document.getElementById("fetchBundlesButton").disabled = true;
 	let req = new XMLHttpRequest();
-	req.open("GET", "https://barter.vg/bundles/json/", true);
+	req.open("GET", "https://bartervg.com/bundles/json/", true);
 	req.onreadystatechange = () => {
 		if (req.readyState === XMLHttpRequest.DONE && req.status === 200) {
 			let resp = JSON.parse(req.response).bundles;
@@ -808,7 +808,7 @@ function pickBundle() {
 				if (this.readyState == XMLHttpRequest.DONE && this.status == 200)
 					resolve(xhttp.response);
 			};
-			xhttp.open("GET", `https://barter.vg/i/${id}/json/`, true);
+			xhttp.open("GET", `https://bartervg.com/i/${id}/json/`, true);
 			xhttp.send();
 		});
 	};
