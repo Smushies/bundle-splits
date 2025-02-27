@@ -819,12 +819,12 @@ function pickBundle() {
 	});
 	
 	Promise.all(promises).then((values) => {
-		let games = values.map(v => JSON.parse(v)).toSorted((a, b) => a.title.localeCompare(b.title, undefined, {sensitivity: 'base'}));
+		let games = values.map(v => JSON.parse(v)).toSorted((a, b) => decodeHtml(a.title).localeCompare(decodeHtml(b.title), undefined, {sensitivity: 'base'}));
 		
 		data.bundle.games = [];
 		link.valid = false;
 		games.forEach(g => data.bundle.games.push({
-			name: g.title,
+			name: decodeHtml(g.title),
 			value: 0,
 			price: 0,
 			priceOverride: false,
@@ -936,6 +936,14 @@ function migrate(storedData) {
 		}
 	}
 	return updatedData;
+}
+
+function decodeHtml(thing) {
+	const decodeSpace = document.createElement('textarea');
+	decodeSpace.innerHTML = thing;
+	const decoded = decodeSpace.value;
+	decodeSpace.remove();
+	return decoded;
 }
 
 let storedData = JSON.parse(localStorage.getItem('data'));
